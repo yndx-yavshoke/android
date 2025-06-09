@@ -18,6 +18,7 @@ import ru.yavshok.app.ui.components.TextField
 import ru.yavshok.app.ui.components.Button
 import ru.yavshok.app.viewmodel.LoginViewModel
 import ru.yavshok.app.viewmodel.ViewModelFactory
+import io.appmetrica.analytics.AppMetrica
 
 @Composable
 fun LoginScreen(
@@ -65,7 +66,10 @@ fun LoginScreen(
         // Email field
         TextField(
             value = uiState.email,
-            onValueChange = viewModel::updateEmail,
+            onValueChange = { newValue ->
+                AppMetrica.reportEvent("field.change.login_email")
+                viewModel.updateEmail(newValue)
+            },
             placeholder = "Email",
             modifier = Modifier.fillMaxWidth(),
             isError = uiState.errorMessage != null
@@ -76,7 +80,10 @@ fun LoginScreen(
         // Password field
         TextField(
             value = uiState.password,
-            onValueChange = viewModel::updatePassword,
+            onValueChange = { newValue ->
+                AppMetrica.reportEvent("field.change.login_password")
+                viewModel.updatePassword(newValue)
+            },
             placeholder = "Пароль",
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
@@ -106,7 +113,10 @@ fun LoginScreen(
             // Login button
             Button(
                 text = if (uiState.isLoading) "Вход..." else "В шок",
-                onClick = viewModel::login,
+                onClick = {
+                    AppMetrica.reportEvent("click.login_submit")
+                    viewModel.login()
+                },
                 modifier = Modifier.weight(1f),
                 isEnabled = !uiState.isLoading,
                 backgroundColor = Color(0xFF007AFF)
@@ -115,7 +125,10 @@ fun LoginScreen(
             // Back button
             Button(
                 text = "Назад",
-                onClick = onNavigateBack,
+                onClick = {
+                    AppMetrica.reportEvent("click.login_back")
+                    onNavigateBack()
+                },
                 modifier = Modifier.weight(1f),
                 isEnabled = !uiState.isLoading,
                 backgroundColor = Color(0xFF6C757D)
@@ -127,7 +140,10 @@ fun LoginScreen(
         // Registration button
         Button(
             text = "Регистрация",
-            onClick = onNavigateToRegister,
+            onClick = {
+                AppMetrica.reportEvent("click.login_register")
+                onNavigateToRegister()
+            },
             modifier = Modifier.fillMaxWidth(),
             isEnabled = !uiState.isLoading,
             backgroundColor = Color(0xFF007AFF)

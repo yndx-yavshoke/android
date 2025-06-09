@@ -10,6 +10,13 @@ android {
     namespace = "ru.yavshok.app"
     compileSdk = 33
 
+    // Load properties from local.properties file
+    val localPropertiesFile = rootProject.file("local.properties")
+    val localProperties = Properties()
+    if (localPropertiesFile.exists()) {
+        localProperties.load(FileInputStream(localPropertiesFile))
+    }
+
     defaultConfig {
         applicationId = "ru.yavshok.app"
         minSdk = 28
@@ -22,16 +29,18 @@ android {
             useSupportLibrary = true
         }
         
-        // Load API keys from local.properties
-        val localPropertiesFile = rootProject.file("local.properties")
-        val localProperties = Properties()
-        if (localPropertiesFile.exists()) {
-            localProperties.load(FileInputStream(localPropertiesFile))
-        }
-        
         // Add build config fields
         buildConfigField("String", "APP_METRICA_API_KEY", "\"${localProperties.getProperty("APP_METRICA_API_KEY", "")}\"")
         buildConfigField("String", "BASE_URL", "\"${project.findProperty("API_BASE_URL")}\"")
+    }
+
+    signingConfigs {
+        create("release") {
+            keyAlias = localProperties.getProperty("KEY_ALIAS")
+            keyPassword = localProperties.getProperty("KEY_PASSWORD")
+            storeFile = rootProject.file(localProperties.getProperty("KEYSTORE_PATH"))
+            storePassword = localProperties.getProperty("KEYSTORE_PASSWORD")
+        }
     }
 
     buildTypes {
@@ -44,6 +53,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {

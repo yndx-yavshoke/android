@@ -30,6 +30,7 @@ import ru.yavshok.app.ui.components.CustomButton
 import ru.yavshok.app.ui.components.TextField
 import ru.yavshok.app.viewmodel.MainViewModel
 import java.util.concurrent.TimeUnit
+import io.appmetrica.analytics.AppMetrica
 
 @Composable
 fun MainScreen(
@@ -41,6 +42,7 @@ fun MainScreen(
     val errorMessage by viewModel.errorMessage
     val isEmailExists by viewModel.isEmailExists
     val showConfetti by viewModel.showConfetti
+
     val context = LocalContext.current
     
     // Create confetti party configuration
@@ -78,7 +80,10 @@ fun MainScreen(
             // Email input
             TextField(
                 value = email,
-                onValueChange = viewModel::onEmailChange,
+                onValueChange = { newValue ->
+                    AppMetrica.reportEvent("field.change.email")
+                    viewModel.onEmailChange(newValue)
+                },
                 placeholder = "Введите Email",
                 modifier = Modifier.padding(bottom = 16.dp),
                 isError = errorMessage != null && !isEmailExists
@@ -122,7 +127,10 @@ fun MainScreen(
             // "Я в шоке?" button
             CustomButton(
                 text = if (isLoading) "Проверяем..." else "Я в шоке?",
-                onClick = { viewModel.checkEmailExists() },
+                onClick = { 
+                    AppMetrica.reportEvent("click.check_email")
+                    viewModel.checkEmailExists() 
+                },
                 isEnabled = viewModel.isEmailValid() && !isLoading,
                 backgroundColor = Color(0xFF007AFF),
                 disabledBackgroundColor = Color.Gray,
@@ -132,7 +140,10 @@ fun MainScreen(
             // "В шок" button
             CustomButton(
                 text = "В шок",
-                onClick = onNavigateToLogin,
+                onClick = {
+                    AppMetrica.reportEvent("click.main_login")
+                    onNavigateToLogin()
+                },
                 backgroundColor = Color(0xFF007AFF),
                 modifier = Modifier
             )

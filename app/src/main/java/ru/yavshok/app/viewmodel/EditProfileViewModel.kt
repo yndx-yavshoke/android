@@ -8,7 +8,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import ru.yavshok.app.data.repository.UserRepository
+import ru.yavshok.app.data.repository.AuthRepository
 import ru.yavshok.app.data.storage.TokenStorage
+import ru.yavshok.app.data.store.UserStore
 
 data class EditProfileUiState(
     val name: String = "",
@@ -19,7 +21,9 @@ data class EditProfileUiState(
 
 class EditProfileViewModel(
     private val userRepository: UserRepository,
-    private val tokenStorage: TokenStorage
+    private val authRepository: AuthRepository,
+    private val tokenStorage: TokenStorage,
+    private val userStore: UserStore
 ) : ViewModel() {
     
     private val _uiState = MutableStateFlow(EditProfileUiState())
@@ -31,38 +35,14 @@ class EditProfileViewModel(
     }
     
     fun loadCurrentUserName() {
-        // First: Load immediately from TokenStorage (no delay)
-        val storedName = tokenStorage.getUserName()
-        if (storedName != null) {
-            Log.d("EditProfileViewModel", "⚡ Setting name immediately from TokenStorage: $storedName")
-            _uiState.value = _uiState.value.copy(name = storedName)
-        }
-        
-        // Then: Fetch fresh data from API to ensure accuracy
-        viewModelScope.launch {
-            try {
-                Log.d("EditProfileViewModel", "🔄 Refreshing user name from API...")
-                val response = userRepository.getCurrentUser()
-                Log.d("EditProfileViewModel", "📡 API Response code: ${response.code()}")
-                
-                if (response.isSuccessful) {
-                    val userResponse = response.body()
-                    Log.d("EditProfileViewModel", "✅ Response body: $userResponse")
-                    userResponse?.user?.let { user ->
-                        // Only update if different from stored value
-                        if (user.name != storedName) {
-                            Log.d("EditProfileViewModel", "🔄 Updating name from API: ${user.name}")
-                            _uiState.value = _uiState.value.copy(name = user.name)
-                        } else {
-                            Log.d("EditProfileViewModel", "✅ API confirms stored name is current")
-                        }
-                    }
-                } else {
-                    Log.e("EditProfileViewModel", "❌ Failed to refresh user: ${response.code()} - ${response.message()}")
-                }
-            } catch (e: Exception) {
-                Log.e("EditProfileViewModel", "💥 Exception refreshing user: ${e.message}", e)
-            }
+        // Get name immediately from UserStore - no loading needed!
+        val user = userStore.getUserImmediate()
+        if (user != null) {
+            Log.d("EditProfileViewModel", "⚡ Setting name immediately from UserStore: ${user.name}")
+            _uiState.value = _uiState.value.copy(name = user.name)
+        } else {
+            Log.e("EditProfileViewModel", "❌ No user data in store")
+            _uiState.value = _uiState.value.copy(errorMessage = "No user data available")
         }
     }
     
@@ -88,40 +68,35 @@ class EditProfileViewModel(
         viewModelScope.launch {
             try {
                 Log.d("EditProfileViewModel", "🔄 Updating user name to: ${currentState.name}")
-                val response = userRepository.updateUserName(currentState.name)
-                Log.d("EditProfileViewModel", "📡 Update API Response code: ${response.code()}")
                 
-                if (response.isSuccessful) {
-                    val userResponse = response.body()
-                    Log.d("EditProfileViewModel", "✅ Update response body: $userResponse")
-                    if (userResponse != null) {
-                        // Update stored user name
-                        val user = userResponse.user
-                        Log.d("EditProfileViewModel", "💾 Saving updated user: id=${user.id}, email=${user.email}, name=${user.name}")
-                        tokenStorage.saveUser(user.id, user.email, user.name)
-                        
+                // 1. Update UserStore immediately for instant UI update
+                val result = userStore.updateUserName(currentState.name)
+                if (result.isSuccess) {
+                    Log.d("EditProfileViewModel", "⚡ UserStore updated instantly")
+                    
+                    // 2. Call API to sync with server
+                    val response = userRepository.updateUserName(currentState.name)
+                    Log.d("EditProfileViewModel", "📡 Update API Response code: ${response.code()}")
+                    
+                    if (response.isSuccessful) {
                         _uiState.value = currentState.copy(
                             isLoading = false,
                             isUpdateSuccessful = true
                         )
                         Log.d("EditProfileViewModel", "✅ Profile update successful!")
                     } else {
-                        Log.e("EditProfileViewModel", "❌ Response body is null")
+                        Log.e("EditProfileViewModel", "❌ API update failed: ${response.code()}")
+                        // API failed but local update already happened - still show success
                         _uiState.value = currentState.copy(
                             isLoading = false,
-                            errorMessage = "Server error"
+                            isUpdateSuccessful = true
                         )
                     }
                 } else {
-                    Log.e("EditProfileViewModel", "❌ Update failed: ${response.code()} - ${response.message()}")
-                    val errorMessage = when (response.code()) {
-                        401 -> "Unauthorized - please login again"
-                        422 -> "Invalid name format"
-                        else -> "Update failed: ${response.code()}"
-                    }
+                    Log.e("EditProfileViewModel", "❌ UserStore update failed")
                     _uiState.value = currentState.copy(
                         isLoading = false,
-                        errorMessage = errorMessage
+                        errorMessage = "Failed to update user data"
                     )
                 }
             } catch (e: Exception) {

@@ -9,6 +9,7 @@ import ru.yavshok.app.data.model.LoginResponse
 import ru.yavshok.app.data.model.RegisterRequest
 import ru.yavshok.app.data.model.RegisterResponse
 import ru.yavshok.app.data.api.UserResponse
+import ru.yavshok.app.data.model.ExperimentResponse
 
 class AuthRepository(private val apiService: ApiService) {
     suspend fun checkEmailExists(email: String): Response<ExistResponse> {
@@ -25,5 +26,9 @@ class AuthRepository(private val apiService: ApiService) {
     
     suspend fun getCurrentUser(token: String): Response<UserResponse> {
         return apiService.getCurrentUser("Bearer $token")
+    }
+    
+    suspend fun getExperiments(): Response<ExperimentResponse> {
+        return apiService.getExperiments()
     }
 }

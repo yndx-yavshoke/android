@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import ru.yavshok.app.data.repository.AuthRepository
 import ru.yavshok.app.data.storage.TokenStorage
 import ru.yavshok.app.data.model.User
+import ru.yavshok.app.data.store.UserStore
 
 data class LoginUiState(
     val email: String = "",
@@ -21,7 +22,8 @@ data class LoginUiState(
 
 class LoginViewModel(
     private val authRepository: AuthRepository,
-    private val tokenStorage: TokenStorage
+    private val tokenStorage: TokenStorage,
+    private val userStore: UserStore
 ) : ViewModel() {
     
     private val _uiState = MutableStateFlow(LoginUiState())
@@ -57,13 +59,9 @@ class LoginViewModel(
                 if (response.isSuccessful) {
                     val loginResponse = response.body()
                     if (loginResponse != null) {
-                        // Save token and user data
+                        // Save token and user data to store
                         tokenStorage.saveToken(loginResponse.token)
-                        tokenStorage.saveUser(
-                            loginResponse.user.id,
-                            loginResponse.user.email,
-                            loginResponse.user.name
-                        )
+                        userStore.setUser(loginResponse.user)
                         
                         _uiState.value = currentState.copy(
                             isLoading = false,

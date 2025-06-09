@@ -24,6 +24,7 @@ import io.appmetrica.analytics.AppMetrica
 import io.appmetrica.analytics.AppMetricaConfig
 import ru.yavshok.app.data.storage.TokenStorage
 import ru.yavshok.app.ui.screens.MainScreen
+import ru.yavshok.app.ui.screens.SplashScreen
 import ru.yavshok.app.ui.screens.login.LoginScreen
 import ru.yavshok.app.ui.screens.register.RegisterScreen
 import ru.yavshok.app.ui.screens.profile.ProfileScreen
@@ -32,11 +33,10 @@ import ru.yavshok.app.ui.theme.YavshokTheme
 import ru.yavshok.app.viewmodel.ViewModelFactory
 import ru.yavshok.app.viewmodel.ProfileViewModel
 import ru.yavshok.app.viewmodel.EditProfileViewModel
-import ru.yavshok.app.viewmodel.LoginViewModel
-import ru.yavshok.app.viewmodel.RegisterViewModel
+import ru.yavshok.app.viewmodel.SplashViewModel
 
 enum class Screen {
-    MAIN, LOGIN, REGISTER, PROFILE, EDIT_PROFILE
+    SPLASH, MAIN, LOGIN, REGISTER, PROFILE, EDIT_PROFILE
 }
 
 class MainActivity : ComponentActivity() {
@@ -46,6 +46,7 @@ class MainActivity : ComponentActivity() {
         // Initialize App Metrica with API key from BuildConfig
         val config = AppMetricaConfig.newConfigBuilder(BuildConfig.APP_METRICA_API_KEY).build()
         AppMetrica.activate(this, config)
+        AppMetrica.enableActivityAutoTracking(this.application)
 
         setContent {
             YavshokTheme {
@@ -58,8 +59,8 @@ class MainActivity : ComponentActivity() {
                     
                     // Simple navigation state with logging
                     var currentScreen by remember { 
-                        mutableStateOf(Screen.MAIN).also {
-                            Log.d("MainActivity", "🟢 Initial currentScreen set to: MAIN")
+                        mutableStateOf(Screen.SPLASH).also {
+                            Log.d("MainActivity", "🟢 Initial currentScreen set to: SPLASH")
                         }
                     }
                     var isLoggedIn by remember { 
@@ -67,6 +68,7 @@ class MainActivity : ComponentActivity() {
                             Log.d("MainActivity", "🟢 Initial isLoggedIn set to: ${tokenStorage.isLoggedIn()}")
                         }
                     }
+
 
                     
                     // Log state changes
@@ -78,21 +80,29 @@ class MainActivity : ComponentActivity() {
                         Log.d("MainActivity", "🔄 Login state changed to: $isLoggedIn")
                     }
                     
-                    // Initial navigation based on login state
-                    LaunchedEffect(Unit) {
-                        Log.d("MainActivity", "🚀 Initial LaunchedEffect - isLoggedIn: $isLoggedIn")
-                        if (isLoggedIn) {
-                            Log.d("MainActivity", "➡️ Navigating to PROFILE on startup")
-                            currentScreen = Screen.PROFILE
-                        }
-                    }
+                    // Note: Initial navigation now handled by SplashScreen
 
                     when (currentScreen) {
+                        Screen.SPLASH -> {
+                            Log.d("MainActivity", "🌟 Rendering SPLASH screen")
+                            val splashViewModel: SplashViewModel = viewModel(factory = viewModelFactory)
+                            SplashScreen(
+                                viewModel = splashViewModel,
+                                onNavigate = { userIsLoggedIn ->
+                                    Log.d("MainActivity", "🚀 SPLASH navigation - isLoggedIn: $userIsLoggedIn")
+                                    isLoggedIn = userIsLoggedIn
+                                    currentScreen = if (userIsLoggedIn) Screen.PROFILE else Screen.MAIN
+                                }
+                            )
+                        }
                         Screen.MAIN -> {
                             Log.d("MainActivity", "📱 Rendering MAIN screen")
                             MainScreen(
                                 onNavigateToLogin = {
                                     Log.d("MainActivity", "🔵 MAIN -> LOGIN button clicked")
+                                    AppMetrica.reportEvent("click.login_button")
+                                    val eventParameters = """{"from":"Main","to":"Login"}"""
+                                    AppMetrica.reportEvent("navigate", eventParameters)
                                     currentScreen = Screen.LOGIN
                                 }
                             )
@@ -104,14 +114,23 @@ class MainActivity : ComponentActivity() {
                                 viewModel = loginViewModel,
                                 onNavigateToRegister = {
                                     Log.d("MainActivity", "🔵 LOGIN -> REGISTER clicked")
+                                    AppMetrica.reportEvent("click.register_link")
+                                    val eventParameters = """{"from":"Login","to":"Register"}"""
+                                    AppMetrica.reportEvent("navigate", eventParameters)
                                     currentScreen = Screen.REGISTER
                                 },
                                 onNavigateBack = {
                                     Log.d("MainActivity", "🔙 LOGIN -> MAIN back clicked")
+                                    AppMetrica.reportEvent("click.back_button")
+                                    val eventParameters = """{"from":"Login","to":"Main"}"""
+                                    AppMetrica.reportEvent("navigate", eventParameters)
                                     currentScreen = Screen.MAIN
                                 },
                                 onLoginSuccess = {
                                     Log.d("MainActivity", "✅ LOGIN SUCCESS -> PROFILE")
+                                    AppMetrica.reportEvent("login.success")
+                                    val eventParameters = """{"from":"Login","to":"Profile"}"""
+                                    AppMetrica.reportEvent("navigate", eventParameters)
                                     isLoggedIn = true
                                     currentScreen = Screen.PROFILE
                                 }
@@ -122,9 +141,15 @@ class MainActivity : ComponentActivity() {
                             RegisterScreen(
                                 viewModel = registerViewModel,
                                 onNavigateBack = {
+                                    AppMetrica.reportEvent("click.back_button")
+                                    val eventParameters = """{"from":"Register","to":"Login"}"""
+                                    AppMetrica.reportEvent("navigate", eventParameters)
                                     currentScreen = Screen.LOGIN
                                 },
                                 onRegistrationSuccess = {
+                                    AppMetrica.reportEvent("register.success")
+                                    val eventParameters = """{"from":"Register","to":"Profile"}"""
+                                    AppMetrica.reportEvent("navigate", eventParameters)
                                     isLoggedIn = true
                                     currentScreen = Screen.PROFILE
                                 }
@@ -134,7 +159,7 @@ class MainActivity : ComponentActivity() {
                             Log.d("MainActivity", "👤 Rendering PROFILE screen - tokenStorage.isLoggedIn(): ${tokenStorage.isLoggedIn()}")
                             if (tokenStorage.isLoggedIn()) {
                                 // Create a stable key for ViewModel scoping
-                                val profileKey = "profile_${tokenStorage.getUserId()}"
+                                val profileKey = "profile_user"
                                 val profileViewModel: ProfileViewModel = viewModel(
                                     key = profileKey,
                                     factory = viewModelFactory
@@ -143,10 +168,17 @@ class MainActivity : ComponentActivity() {
                                     viewModel = profileViewModel,
                                     onEditProfileClick = {
                                         Log.d("MainActivity", "✏️ PROFILE -> EDIT_PROFILE clicked")
+                                        AppMetrica.reportEvent("click.edit_profile")
+                                        val eventParameters = """{"from":"Profile","to":"EditProfile"}"""
+                                        AppMetrica.reportEvent("navigate", eventParameters)
                                         currentScreen = Screen.EDIT_PROFILE
                                     },
                                     onLogout = {
                                         Log.d("MainActivity", "🚪 LOGOUT clicked - clearing state")
+                                        AppMetrica.reportEvent("click.logout")
+                                        AppMetrica.reportEvent("logout.success")
+                                        val eventParameters = """{"from":"Profile","to":"Main"}"""
+                                        AppMetrica.reportEvent("navigate", eventParameters)
                                         isLoggedIn = false
                                         currentScreen = Screen.MAIN
                                     }
@@ -166,10 +198,16 @@ class MainActivity : ComponentActivity() {
                                 viewModel = editProfileViewModel,
                                 onNavigateBack = {
                                     Log.d("MainActivity", "🔙 EDIT_PROFILE -> PROFILE back clicked")
+                                    AppMetrica.reportEvent("click.back_button")
+                                    val eventParameters = """{"from":"EditProfile","to":"Profile"}"""
+                                    AppMetrica.reportEvent("navigate", eventParameters)
                                     currentScreen = Screen.PROFILE
                                 },
                                 onProfileUpdated = {
                                     Log.d("MainActivity", "✅ PROFILE UPDATED -> PROFILE")
+                                    AppMetrica.reportEvent("profile.update_success")
+                                    val eventParameters = """{"from":"EditProfile","to":"Profile"}"""
+                                    AppMetrica.reportEvent("navigate", eventParameters)
                                     currentScreen = Screen.PROFILE
                                 }
                             )

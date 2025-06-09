@@ -12,6 +12,7 @@ import ru.yavshok.app.data.model.LoginResponse
 import ru.yavshok.app.data.model.RegisterRequest
 import ru.yavshok.app.data.model.RegisterResponse
 import ru.yavshok.app.data.model.User
+import ru.yavshok.app.data.model.ExperimentResponse
 
 interface ApiService {
     @POST("/exist")
@@ -25,6 +26,9 @@ interface ApiService {
     
     @GET("/user/me")
     suspend fun getCurrentUser(@Header("Authorization") token: String): Response<UserResponse>
+    
+    @GET("/experiments")
+    suspend fun getExperiments(): Response<ExperimentResponse>
 }
 
 data class UserResponse(

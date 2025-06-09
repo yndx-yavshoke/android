@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.sp
 import ru.yavshok.app.ui.components.TextField
 import ru.yavshok.app.ui.components.Button
 import ru.yavshok.app.viewmodel.EditProfileViewModel
+import io.appmetrica.analytics.AppMetrica
 
 @Composable
 fun EditProfileScreen(
@@ -78,7 +79,10 @@ fun EditProfileScreen(
         // Name field
         TextField(
             value = uiState.name,
-            onValueChange = viewModel::updateName,
+            onValueChange = { newValue ->
+                AppMetrica.reportEvent("field.change.edit_name")
+                viewModel.updateName(newValue)
+            },
             placeholder = "Enter your name",
             modifier = Modifier.fillMaxWidth(),
             isError = uiState.errorMessage != null
@@ -102,7 +106,10 @@ fun EditProfileScreen(
         // Save Changes button
         Button(
             text = if (uiState.isLoading) "Saving..." else "Save Changes",
-            onClick = viewModel::updateProfile,
+            onClick = {
+                AppMetrica.reportEvent("click.edit_save")
+                viewModel.updateProfile()
+            },
             modifier = Modifier.fillMaxWidth(),
             isEnabled = !uiState.isLoading && uiState.name.isNotBlank(),
             backgroundColor = Color(0xFF007AFF)
@@ -113,7 +120,10 @@ fun EditProfileScreen(
         // Cancel button
         Button(
             text = "Cancel",
-            onClick = onNavigateBack,
+            onClick = {
+                AppMetrica.reportEvent("click.edit_cancel")
+                onNavigateBack()
+            },
             modifier = Modifier.fillMaxWidth(),
             isEnabled = !uiState.isLoading,
             backgroundColor = Color(0xFF6C757D)

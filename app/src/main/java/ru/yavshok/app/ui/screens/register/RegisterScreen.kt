@@ -20,6 +20,7 @@ import ru.yavshok.app.ui.components.TextField
 import ru.yavshok.app.ui.components.Button
 import ru.yavshok.app.viewmodel.RegisterViewModel
 import ru.yavshok.app.viewmodel.ViewModelFactory
+import io.appmetrica.analytics.AppMetrica
 
 @Composable
 fun RegisterScreen(
@@ -66,8 +67,11 @@ fun RegisterScreen(
         // Email field
         TextField(
             value = uiState.email,
-            onValueChange = viewModel::updateEmail,
-            placeholder = "Email",
+            onValueChange = { newValue ->
+                AppMetrica.reportEvent("field.change.register_email")
+                viewModel.updateEmail(newValue)
+            },
+            placeholder = "Введите email",
             modifier = Modifier.fillMaxWidth(),
             isError = uiState.errorMessage != null
         )
@@ -77,7 +81,10 @@ fun RegisterScreen(
         // Password field
         TextField(
             value = uiState.password,
-            onValueChange = viewModel::updatePassword,
+            onValueChange = { newValue ->
+                AppMetrica.reportEvent("field.change.register_password")
+                viewModel.updatePassword(newValue)
+            },
             placeholder = "Пароль",
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
@@ -89,7 +96,10 @@ fun RegisterScreen(
         // Age field
         TextField(
             value = uiState.age,
-            onValueChange = viewModel::updateAge,
+            onValueChange = { newValue ->
+                AppMetrica.reportEvent("field.change.register_age")
+                viewModel.updateAge(newValue)
+            },
             placeholder = "Возраст",
             modifier = Modifier.fillMaxWidth(),
             isError = uiState.errorMessage != null,
@@ -114,7 +124,10 @@ fun RegisterScreen(
         // Registration button
         Button(
             text = if (uiState.isLoading) "Регистрация..." else "Зарегистрироваться",
-            onClick = viewModel::register,
+            onClick = {
+                AppMetrica.reportEvent("click.register_submit")
+                viewModel.register()
+            },
             modifier = Modifier.fillMaxWidth(),
             isEnabled = !uiState.isLoading,
             backgroundColor = Color(0xFF007AFF)
@@ -125,7 +138,10 @@ fun RegisterScreen(
         // Back button
         Button(
             text = "Назад",
-            onClick = onNavigateBack,
+            onClick = {
+                AppMetrica.reportEvent("click.register_back")
+                onNavigateBack()
+            },
             modifier = Modifier.fillMaxWidth(),
             isEnabled = !uiState.isLoading,
             backgroundColor = Color(0xFF6C757D)
