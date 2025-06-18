@@ -30,22 +30,31 @@ android {
         }
         
         // Add build config fields
-        buildConfigField("String", "APP_METRICA_API_KEY", "\"${localProperties.getProperty("APP_METRICA_API_KEY", "")}\"")
+
         buildConfigField("String", "BASE_URL", "\"${project.findProperty("API_BASE_URL")}\"")
     }
 
     signingConfigs {
         create("release") {
-            keyAlias = localProperties.getProperty("KEY_ALIAS")
-            keyPassword = localProperties.getProperty("KEY_PASSWORD")
-            storeFile = rootProject.file(localProperties.getProperty("KEYSTORE_PATH"))
-            storePassword = localProperties.getProperty("KEYSTORE_PASSWORD")
+            // Only configure release signing if all required properties are present
+            val keyAlias = localProperties.getProperty("KEY_ALIAS")
+            val keyPassword = localProperties.getProperty("KEY_PASSWORD")
+            val keystorePath = localProperties.getProperty("KEYSTORE_PATH")
+            val keystorePassword = localProperties.getProperty("KEYSTORE_PASSWORD")
+            
+            if (keyAlias != null && keyPassword != null && keystorePath != null && keystorePassword != null) {
+                this.keyAlias = keyAlias
+                this.keyPassword = keyPassword
+                this.storeFile = rootProject.file(keystorePath)
+                this.storePassword = keystorePassword
+            }
         }
     }
 
     buildTypes {
         debug {
             isDebuggable = true
+            // Debug builds will use the default debug keystore automatically
         }
         release {
             isMinifyEnabled = false
@@ -53,7 +62,15 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("release")
+            // Only apply release signing config if keystore properties are available
+            val hasKeystoreConfig = localProperties.getProperty("KEY_ALIAS") != null &&
+                    localProperties.getProperty("KEY_PASSWORD") != null &&
+                    localProperties.getProperty("KEYSTORE_PATH") != null &&
+                    localProperties.getProperty("KEYSTORE_PASSWORD") != null
+            
+            if (hasKeystoreConfig) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
     compileOptions {
@@ -103,7 +120,7 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
 
     // App Metrica
-    implementation("io.appmetrica.analytics:analytics:7.9.0")
+
     
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")

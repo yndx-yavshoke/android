@@ -20,7 +20,7 @@ import ru.yavshok.app.ui.components.TextField
 import ru.yavshok.app.ui.components.Button
 import ru.yavshok.app.viewmodel.RegisterViewModel
 import ru.yavshok.app.viewmodel.ViewModelFactory
-import io.appmetrica.analytics.AppMetrica
+
 
 @Composable
 fun RegisterScreen(
@@ -68,7 +68,6 @@ fun RegisterScreen(
         TextField(
             value = uiState.email,
             onValueChange = { newValue ->
-                AppMetrica.reportEvent("field.change.register_email")
                 viewModel.updateEmail(newValue)
             },
             placeholder = "Введите email",
@@ -82,7 +81,6 @@ fun RegisterScreen(
         TextField(
             value = uiState.password,
             onValueChange = { newValue ->
-                AppMetrica.reportEvent("field.change.register_password")
                 viewModel.updatePassword(newValue)
             },
             placeholder = "Пароль",
@@ -97,7 +95,6 @@ fun RegisterScreen(
         TextField(
             value = uiState.age,
             onValueChange = { newValue ->
-                AppMetrica.reportEvent("field.change.register_age")
                 viewModel.updateAge(newValue)
             },
             placeholder = "Возраст",
@@ -125,7 +122,6 @@ fun RegisterScreen(
         Button(
             text = if (uiState.isLoading) "Регистрация..." else "Зарегистрироваться",
             onClick = {
-                AppMetrica.reportEvent("click.register_submit")
                 viewModel.register()
             },
             modifier = Modifier.fillMaxWidth(),
@@ -139,7 +135,6 @@ fun RegisterScreen(
         Button(
             text = "Назад",
             onClick = {
-                AppMetrica.reportEvent("click.register_back")
                 onNavigateBack()
             },
             modifier = Modifier.fillMaxWidth(),

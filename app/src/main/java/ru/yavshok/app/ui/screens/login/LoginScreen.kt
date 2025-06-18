@@ -18,7 +18,7 @@ import ru.yavshok.app.ui.components.TextField
 import ru.yavshok.app.ui.components.Button
 import ru.yavshok.app.viewmodel.LoginViewModel
 import ru.yavshok.app.viewmodel.ViewModelFactory
-import io.appmetrica.analytics.AppMetrica
+
 
 @Composable
 fun LoginScreen(
@@ -67,7 +67,6 @@ fun LoginScreen(
         TextField(
             value = uiState.email,
             onValueChange = { newValue ->
-                AppMetrica.reportEvent("field.change.login_email")
                 viewModel.updateEmail(newValue)
             },
             placeholder = "Email",
@@ -81,7 +80,6 @@ fun LoginScreen(
         TextField(
             value = uiState.password,
             onValueChange = { newValue ->
-                AppMetrica.reportEvent("field.change.login_password")
                 viewModel.updatePassword(newValue)
             },
             placeholder = "Пароль",
@@ -113,10 +111,9 @@ fun LoginScreen(
             // Login button
             Button(
                 text = if (uiState.isLoading) "Вход..." else "В шок",
-                onClick = {
-                    AppMetrica.reportEvent("click.login_submit")
-                    viewModel.login()
-                },
+                            onClick = {
+                viewModel.login()
+            },
                 modifier = Modifier.weight(1f),
                 isEnabled = !uiState.isLoading,
                 backgroundColor = Color(0xFF007AFF)
@@ -124,11 +121,10 @@ fun LoginScreen(
             
             // Back button
             Button(
-                text = "Назад",
-                onClick = {
-                    AppMetrica.reportEvent("click.login_back")
-                    onNavigateBack()
-                },
+                        text = "Назад",
+        onClick = {
+            onNavigateBack()
+        },
                 modifier = Modifier.weight(1f),
                 isEnabled = !uiState.isLoading,
                 backgroundColor = Color(0xFF6C757D)
@@ -141,7 +137,6 @@ fun LoginScreen(
         Button(
             text = "Регистрация",
             onClick = {
-                AppMetrica.reportEvent("click.login_register")
                 onNavigateToRegister()
             },
             modifier = Modifier.fillMaxWidth(),

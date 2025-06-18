@@ -36,7 +36,7 @@ import coil.request.ImageRequest
 import ru.yavshok.app.R
 import ru.yavshok.app.viewmodel.ProfileUiState
 import ru.yavshok.app.viewmodel.ProfileViewModel
-import io.appmetrica.analytics.AppMetrica
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -174,7 +174,6 @@ private fun ProfileHeader(
              }
              IconButton(
                  onClick = { 
-                     AppMetrica.reportEvent("click.profile_logout")
                      onLogoutClick() 
                  },
              ) {
@@ -193,7 +192,6 @@ private fun ProfileHeader(
         // Edit Profile button
         Button(
             onClick = {
-                AppMetrica.reportEvent("click.profile_edit")
                 onEditProfileClick()
             },
             modifier = Modifier
@@ -260,7 +258,6 @@ private fun PhotoGrid(photos: List<String>) {
                 modifier = Modifier
                     .aspectRatio(1f)
                     .clickable {
-                        AppMetrica.reportEvent("click.photo_$photo")
                         // TODO: Open photo detail
                     },
                 contentScale = ContentScale.Crop

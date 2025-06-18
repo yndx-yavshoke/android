@@ -30,12 +30,12 @@ import ru.yavshok.app.ui.components.CustomButton
 import ru.yavshok.app.ui.components.TextField
 import ru.yavshok.app.viewmodel.MainViewModel
 import java.util.concurrent.TimeUnit
-import io.appmetrica.analytics.AppMetrica
+
 
 @Composable
 fun MainScreen(
     onNavigateToLogin: () -> Unit,
-    viewModel: MainViewModel = viewModel()
+    viewModel: MainViewModel
 ) {
     val email by viewModel.email
     val isLoading by viewModel.isLoading
@@ -81,7 +81,6 @@ fun MainScreen(
             TextField(
                 value = email,
                 onValueChange = { newValue ->
-                    AppMetrica.reportEvent("field.change.email")
                     viewModel.onEmailChange(newValue)
                 },
                 placeholder = "Введите Email",
@@ -128,7 +127,6 @@ fun MainScreen(
             CustomButton(
                 text = if (isLoading) "Проверяем..." else "Я в шоке?",
                 onClick = { 
-                    AppMetrica.reportEvent("click.check_email")
                     viewModel.checkEmailExists() 
                 },
                 isEnabled = viewModel.isEmailValid() && !isLoading,
@@ -141,7 +139,6 @@ fun MainScreen(
             CustomButton(
                 text = "В шок",
                 onClick = {
-                    AppMetrica.reportEvent("click.main_login")
                     onNavigateToLogin()
                 },
                 backgroundColor = Color(0xFF007AFF),
