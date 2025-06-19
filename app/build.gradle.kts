@@ -1,14 +1,14 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
 }
 
-import java.util.Properties
-import java.io.FileInputStream
-
 android {
     namespace = "ru.yavshok.app"
-    compileSdk = 33
+    compileSdk = 34
 
     // Load properties from local.properties file
     val localPropertiesFile = rootProject.file("local.properties")
@@ -25,6 +25,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments["clearPackageData"] = "true"
         vectorDrawables {
             useSupportLibrary = true
         }
