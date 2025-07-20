@@ -21,6 +21,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import ru.yavshok.app.Tags
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -112,6 +114,7 @@ private fun ProfileHeader(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
+            .testTag(Tags.ProfileScreen.screenContainer)
     ) {
         // Top row with profile info and share button
         Row(
@@ -146,13 +149,17 @@ private fun ProfileHeader(
                         text = profile.name,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black
+                        color = Color.Black,
+                        modifier = Modifier
+                            .testTag(Tags.ProfileScreen.catName)
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = profile.subtitle,
                         fontSize = 16.sp,
-                        color = Color.Black
+                        color = Color.Black,
+                        modifier = Modifier
+                            .testTag(Tags.ProfileScreen.catAge)
                     )
                 }
             }
@@ -181,7 +188,9 @@ private fun ProfileHeader(
                      Logout,
                      contentDescription = "Logout",
                      tint = Color.Black,
-                     modifier = Modifier.size(24.dp)
+                     modifier = Modifier
+                         .size(24.dp)
+                         .testTag(Tags.ProfileScreen.logoutButton)
                  )
              }
          }
@@ -196,7 +205,8 @@ private fun ProfileHeader(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(35.dp),
+                .height(35.dp)
+                .testTag(Tags.ProfileScreen.editButton),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Transparent,
                 contentColor = Color.Black
