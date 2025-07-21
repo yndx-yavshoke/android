@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -16,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import ru.yavshok.app.Tags
 import ru.yavshok.app.ui.components.TextField
 import ru.yavshok.app.ui.components.Button
 import ru.yavshok.app.viewmodel.RegisterViewModel
@@ -48,7 +50,8 @@ fun RegisterScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(24.dp)
-            .verticalScroll(rememberScrollState()),
+            .verticalScroll(rememberScrollState())
+            .testTag(Tags.RegisterScreen.screenContainer),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(80.dp))
@@ -59,7 +62,8 @@ fun RegisterScreen(
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            modifier = Modifier.testTag(Tags.RegisterScreen.screenTitle),
         )
         
         Spacer(modifier = Modifier.height(48.dp))
@@ -71,7 +75,9 @@ fun RegisterScreen(
                 viewModel.updateEmail(newValue)
             },
             placeholder = "Введите email",
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(Tags.RegisterScreen.emailTextField),
             isError = uiState.errorMessage != null
         )
         
@@ -84,7 +90,9 @@ fun RegisterScreen(
                 viewModel.updatePassword(newValue)
             },
             placeholder = "Пароль",
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(Tags.RegisterScreen.passwordTextField),
             visualTransformation = PasswordVisualTransformation(),
             isError = uiState.errorMessage != null
         )
@@ -98,7 +106,9 @@ fun RegisterScreen(
                 viewModel.updateAge(newValue)
             },
             placeholder = "Возраст",
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(Tags.RegisterScreen.ageTextField),
             isError = uiState.errorMessage != null,
             keyboardType = KeyboardType.Number
         )
@@ -124,7 +134,9 @@ fun RegisterScreen(
             onClick = {
                 viewModel.register()
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(Tags.RegisterScreen.registerButton),
             isEnabled = !uiState.isLoading,
             backgroundColor = Color(0xFF007AFF)
         )
@@ -137,7 +149,9 @@ fun RegisterScreen(
             onClick = {
                 onNavigateBack()
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(Tags.RegisterScreen.backButton),
             isEnabled = !uiState.isLoading,
             backgroundColor = Color(0xFF6C757D)
         )

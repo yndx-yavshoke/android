@@ -5,14 +5,15 @@ import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import ru.yavshok.app.Tags
 
-class MainScreenPageObject(private val composeTestRule: AndroidComposeTestRule<*, *>) {
-    public val title = composeTestRule.onNodeWithTag("main_screen.screen_title")
-    public val emailField = composeTestRule.onNodeWithTag("main_screen.email_text_field",)
-    public val checkButton = composeTestRule.onNodeWithTag("main_screen.check_button")
-    public val toLoginButton = composeTestRule.onNodeWithTag("main_screen.login_button")
-    public val success = composeTestRule.onNodeWithTag("main_screen.success_message")
-    public val fail = composeTestRule.onNodeWithTag("main_screen.failure_message")
+class MainScreenPageObject(composeTestRule: AndroidComposeTestRule<*, *>) {
+    val title = composeTestRule.onNodeWithTag(Tags.MainScreen.screenTitle)
+    val emailField = composeTestRule.onNodeWithTag(Tags.MainScreen.emailTextField)
+    val checkButton = composeTestRule.onNodeWithTag(Tags.MainScreen.checkButton)
+    val toLoginButton = composeTestRule.onNodeWithTag(Tags.MainScreen.loginButton)
+    val success = composeTestRule.onNodeWithTag(Tags.MainScreen.successMessage)
+    val fail = composeTestRule.onNodeWithTag(Tags.MainScreen.failureMessage)
 
     fun enterEmail(email: String): MainScreenPageObject {
         emailField.assertIsDisplayed()

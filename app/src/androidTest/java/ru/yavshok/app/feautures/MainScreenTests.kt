@@ -12,7 +12,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import ru.yavshok.app.screens.MainScreenPageObject
+import ru.yavshok.app.screens.AppPages
 import ru.yavshok.app.ui.screens.MainScreen
 
 
@@ -22,7 +22,7 @@ class MainScreenTests {
     @get: Rule
     val composeTestRule  = createAndroidComposeRule<ComponentActivity>()
 
-    private lateinit var mainScreen: MainScreenPageObject
+    private lateinit var appPages: AppPages
 
     @Before
     fun setUp() {
@@ -32,47 +32,47 @@ class MainScreenTests {
                 viewModel = viewModel()
             )
         }
-        mainScreen = MainScreenPageObject(composeTestRule)
+        appPages = AppPages(composeTestRule)
     }
 
     @Test
     fun emailShouldExist() {
-        mainScreen.checkEmail("example@mail.ru")
+        appPages.mainScreen.checkEmail("example@mail.ru")
         composeTestRule.waitUntil(5000) {
             try {
-                mainScreen.success.assertExists()
+                appPages.mainScreen.success.assertIsDisplayed()
                 true
             } catch (e: AssertionError) {
                 false
             }
         }
-        mainScreen.fail.assertDoesNotExist()
+        appPages.mainScreen.fail.assertDoesNotExist()
         }
 
     @Test
     fun emailShouldNotExist() {
-        mainScreen.checkEmail("not_exist_email@example.ru")
+        appPages.mainScreen.checkEmail("not_exist_email@example.ru")
         composeTestRule.waitUntil(5000) {
             try {
-                mainScreen.fail.assertExists()
+                appPages.mainScreen.fail.assertIsDisplayed()
                 true
             } catch (e: AssertionError) {
                 false
             }
         }
-        mainScreen.success.assertDoesNotExist()
+        appPages.mainScreen.success.assertDoesNotExist()
     }
 
     @Test
     fun checkAllElements() {
-        mainScreen.title.assertIsDisplayed()
-        mainScreen.emailField.assertIsDisplayed()
-        mainScreen.emailField.assertTextContains("Введите Email")
-        mainScreen.checkButton.assertIsNotEnabled()
-        mainScreen.enterEmail("random_email@mail.ru")
-        mainScreen.checkButton.assertIsEnabled()
-        mainScreen.checkButton.assertTextContains("Я в шоке?")
-        mainScreen.toLoginButton.assertIsDisplayed()
-        mainScreen.toLoginButton.assertTextContains("В шок")
+        appPages.mainScreen.title.assertIsDisplayed()
+        appPages.mainScreen.emailField.assertIsDisplayed()
+        appPages.mainScreen.emailField.assertTextContains("Введите Email")
+        appPages.mainScreen.checkButton.assertIsNotEnabled()
+        appPages.mainScreen.enterEmail("random_email@mail.ru")
+        appPages.mainScreen.checkButton.assertIsEnabled()
+        appPages.mainScreen.checkButton.assertTextContains("Я в шоке?")
+        appPages.mainScreen.toLoginButton.assertIsDisplayed()
+        appPages.mainScreen.toLoginButton.assertTextContains("В шок")
     }
 }

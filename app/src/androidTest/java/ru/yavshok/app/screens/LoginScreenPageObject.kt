@@ -5,14 +5,15 @@ import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import ru.yavshok.app.Tags
 
-class LoginScreenPageObject(private val composeTestRule: AndroidComposeTestRule<*, *>) {
-    public val title = composeTestRule.onNodeWithTag("login_screen.screen_title")
-    public val emailField = composeTestRule.onNodeWithTag("login_screen.email_text_field",)
-    public val passwordField = composeTestRule.onNodeWithTag("login_screen.password_text_field",)
-    public val backButton = composeTestRule.onNodeWithTag("login_screen.back_button")
-    public val loginButton = composeTestRule.onNodeWithTag("login_screen.login_button")
-    public val registerButton = composeTestRule.onNodeWithTag("login_screen.register_button")
+class LoginScreenPageObject(composeTestRule: AndroidComposeTestRule<*, *>) {
+    val title = composeTestRule.onNodeWithTag(Tags.LoginScreen.screenTitle)
+    val emailField = composeTestRule.onNodeWithTag(Tags.LoginScreen.emailTextField)
+    val passwordField = composeTestRule.onNodeWithTag(Tags.LoginScreen.passwordTextField)
+    val backButton = composeTestRule.onNodeWithTag(Tags.LoginScreen.backButton)
+    val loginButton = composeTestRule.onNodeWithTag(Tags.LoginScreen.loginButton)
+    val registerButton = composeTestRule.onNodeWithTag(Tags.LoginScreen.registerButton)
 
     fun enterEmail(email: String): LoginScreenPageObject {
         emailField.assertIsDisplayed()
