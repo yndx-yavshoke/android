@@ -129,7 +129,9 @@ fun MainScreen(
                         text = message,
                         color = Color.Red,
                         fontSize = 30.sp,
-                        modifier = Modifier.padding(bottom = 16.dp)
+                        modifier = Modifier
+                            .testTag(Tags.MainScreen.nonRegisterText)
+                            .padding(bottom = 16.dp)
                     )
                 }
             }
