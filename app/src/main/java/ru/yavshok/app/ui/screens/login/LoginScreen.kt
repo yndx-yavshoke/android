@@ -1,5 +1,6 @@
 package ru.yavshok.app.ui.screens.login
 
+import android.nfc.Tag
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -85,7 +86,9 @@ fun LoginScreen(
                 viewModel.updateEmail(newValue)
             },
             placeholder = "Email",
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .testTag(Tags.LoginScreen.screenEmailTextField)
+                .fillMaxWidth(),
             isError = uiState.errorMessage != null
         )
         
@@ -98,7 +101,9 @@ fun LoginScreen(
                 viewModel.updatePassword(newValue)
             },
             placeholder = "Пароль",
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .testTag(Tags.LoginScreen.screenPasswordTextField)
+                .fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
             isError = uiState.errorMessage != null
         )
@@ -112,7 +117,9 @@ fun LoginScreen(
                 color = Color.Red,
                 fontSize = 16.sp,
                 textAlign = TextAlign.Start,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .testTag(Tags.LoginScreen.errorMessage)
+                    .fillMaxWidth()
             )
         }
         
@@ -129,7 +136,9 @@ fun LoginScreen(
                             onClick = {
                 viewModel.login()
             },
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .testTag(Tags.LoginScreen.screenEnterButton)
+                    .weight(1f),
                 isEnabled = !uiState.isLoading,
                 backgroundColor = Color(0xFF007AFF)
             )
@@ -140,7 +149,9 @@ fun LoginScreen(
         onClick = {
             onNavigateBack()
         },
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .testTag(Tags.LoginScreen.screenBackButton)
+                    .weight(1f),
                 isEnabled = !uiState.isLoading,
                 backgroundColor = Color(0xFF6C757D)
             )
