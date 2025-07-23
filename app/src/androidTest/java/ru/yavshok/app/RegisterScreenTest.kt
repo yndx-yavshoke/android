@@ -19,35 +19,23 @@ import ru.yavshok.app.ui.screens.register.RegisterScreen
 @RunWith(AndroidJUnit4::class)
 class RegisterScreenTest {
 
-//  Tags.RegistrationScreen.screenTitle
-//  Tags.RegistrationScreen.emailTextField
-//  Tags.RegistrationScreen.passwordTextField
-//  Tags.RegistrationScreen.ageTextField
-
-//  Tags.RegistrationScreen.errorTextMessage
-
-//  Tags.RegistrationScreen.registrationButton
-//  Tags.RegistrationScreen.backButton
-
-//  Tags.LoginScreen.screenTitle
-//  Tags.ProfileScreen.logoutButton
-
     @get: Rule
     val composeRule = createComposeRule()
 
     val vmFactory = ViewModelFactory(ApplicationProvider.getApplicationContext())
 
-    @Test
-    fun shouldTypeEmailAndPasswordAndAgeOnRegisterScreen() {
-
-//  Генерируем уникальные данные пользователя для каждого теста
-        val testUser = TestDataGenerator().generateUserData()
-//  Наполняем экран
+    private fun openRegistrationScreen(){
         composeRule.setContent {
             RegisterScreen(
                 viewModel = viewModel(factory = vmFactory)
             )
         }
+    }
+
+    @Test
+    fun shouldTypeEmailAndPasswordAndAgeOnRegisterScreen() {
+        val testUser = TestDataGenerator().generateUserData()
+        openRegistrationScreen()
 //  Элементы отображены на дисплее
         composeRule.onNodeWithTag(Tags.RegistrationScreen.screenTitle).assertIsDisplayed()
         composeRule.onNodeWithTag(Tags.RegistrationScreen.emailTextField).assertIsDisplayed()
@@ -70,22 +58,11 @@ class RegisterScreenTest {
     @Test
     fun shouldRegisterAlreadyExistUserDataOnRegisterScreen() {
         val testUser = TestDataId.registeredUser
-//  Наполняем экран
-        composeRule.setContent {
-            RegisterScreen(
-                viewModel = viewModel(factory = vmFactory)
-            )
-        }
-//  Элементы отображены на дисплее
-        composeRule.onNodeWithTag(Tags.RegistrationScreen.screenTitle).assertIsDisplayed()
-        composeRule.onNodeWithTag(Tags.RegistrationScreen.emailTextField).assertIsDisplayed()
-        composeRule.onNodeWithTag(Tags.RegistrationScreen.passwordTextField).assertIsDisplayed()
-        composeRule.onNodeWithTag(Tags.RegistrationScreen.ageTextField).assertIsDisplayed()
+        openRegistrationScreen()
 //  Вводим в поля ввода данные зарег пользовтеля
         composeRule.onNodeWithTag(Tags.RegistrationScreen.emailTextField).performTextInput(testUser.email)
         composeRule.onNodeWithTag(Tags.RegistrationScreen.passwordTextField).performTextInput(testUser.password)
-//  Генерим возраст
-        composeRule.onNodeWithTag(Tags.RegistrationScreen.ageTextField).performTextInput(testUser.age.toString())
+        composeRule.onNodeWithTag(Tags.RegistrationScreen.ageTextField).performTextInput("30")
 //  Проверяем, что введённые данные отображаются
         composeRule.onNodeWithTag(Tags.RegistrationScreen.emailTextField).assertTextContains(testUser.email)
 //  Кликаем по registrationButton
@@ -96,22 +73,11 @@ class RegisterScreenTest {
             matcher = hasTestTag(Tags.RegistrationScreen.errorTextMessage))
 //  Проверяем что отобразился errorTextMessage
         composeRule.onNodeWithTag(Tags.RegistrationScreen.errorTextMessage).assertIsDisplayed()
-//        Thread.sleep(999999)
+
     }
     @Test
     fun shouldNotPassEmptyFieldOnRegisterScreen() {
-        val testUser = TestDataId.registeredUser
-//  Наполняем экран
-        composeRule.setContent {
-            RegisterScreen(
-                viewModel = viewModel(factory = vmFactory)
-            )
-        }
-//  Элементы отображены на дисплее
-        composeRule.onNodeWithTag(Tags.RegistrationScreen.screenTitle).assertIsDisplayed()
-        composeRule.onNodeWithTag(Tags.RegistrationScreen.emailTextField).assertIsDisplayed()
-        composeRule.onNodeWithTag(Tags.RegistrationScreen.passwordTextField).assertIsDisplayed()
-        composeRule.onNodeWithTag(Tags.RegistrationScreen.ageTextField).assertIsDisplayed()
+        openRegistrationScreen()
 //  Поля ввода оставляем пустыми
 //  Кликаем по loginButton
         composeRule.onNodeWithTag(Tags.RegistrationScreen.registrationButton).performClick()

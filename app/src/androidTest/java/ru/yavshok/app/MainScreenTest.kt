@@ -24,24 +24,23 @@ import ru.yavshok.app.viewmodel.ViewModelFactory
 @ExperimentalTestApi
 @RunWith(AndroidJUnit4::class)
 class MainScreenTest {
-//    Tags.MainScreen.screenTitle
-//    Tags.MainScreen.emailTextField
-//    Tags.MainScreen.checkButton
-//    Tags.MainScreen.loginButton
-
 
     @get: Rule
     val composeRule = createComposeRule()
 
+    private fun openMainScreen(){
+        composeRule.setContent {
+            MainScreen(
+                onNavigateToLogin = {},
+                viewModel = MainViewModel()
+            )
+        }
+    }
+
     @Test
     fun elementsOnMainScreenIsVisible() {
-//  Наполняем экран страницей MainScreen
-    composeRule.setContent {
-        MainScreen(
-            onNavigateToLogin = {},
-            viewModel = MainViewModel()
-        )
-    }
+        openMainScreen()
+//  Элементы отображены на дисплее
     composeRule.onNodeWithTag(Tags.MainScreen.screenTitle).assertIsDisplayed()
     composeRule.onNodeWithTag(Tags.MainScreen.emailTextField).assertIsDisplayed()
     composeRule.onNodeWithTag(Tags.MainScreen.loginButton).assertIsDisplayed()
@@ -50,16 +49,9 @@ class MainScreenTest {
 
     @Test
     fun shouldTypeEmailOnMainScreen() {
+        openMainScreen()
         val testUser = TestDataId.registeredUser
-//  Наполняем экран страницей MainScreen
-        composeRule.setContent {
-            MainScreen(
-                onNavigateToLogin = {},
-                viewModel = MainViewModel()
-            )
-        }
 //  Элементы отображены на дисплее
-        composeRule.onNodeWithTag(Tags.MainScreen.screenTitle).assertIsDisplayed()
         composeRule.onNodeWithTag(Tags.MainScreen.emailTextField).assertIsDisplayed()
 //  Вводим в поле ввода данные зарег пользовтеля
         composeRule.onNodeWithTag(Tags.MainScreen.emailTextField).performTextInput(testUser.email)
@@ -69,16 +61,9 @@ class MainScreenTest {
 
     @Test
     fun shouldCheckExistsEmailOnMainScreen() {
+        openMainScreen()
         val testUser = TestDataId.registeredUser
-//  Наполняем экран страницей Мэйн
-        composeRule.setContent {
-            MainScreen(
-                onNavigateToLogin = {},
-                viewModel = MainViewModel()
-            )
-        }
 //  Элементы отображены на дисплее
-        composeRule.onNodeWithTag(Tags.MainScreen.screenTitle).assertIsDisplayed()
         composeRule.onNodeWithTag(Tags.MainScreen.emailTextField).assertIsDisplayed()
 //  Вводим в поле ввода данные зарег пользовтеля
         composeRule.onNodeWithTag(Tags.MainScreen.emailTextField).performTextInput(testUser.email)
@@ -93,20 +78,14 @@ class MainScreenTest {
 //  Проверяем наличие successMessageImage и successMessageText
         composeRule.onNodeWithTag(Tags.MainScreen.successMessageImage).assertIsDisplayed()
         composeRule.onNodeWithTag(Tags.MainScreen.successMessageText).assertIsDisplayed()
+        composeRule.onNodeWithTag(Tags.MainScreen.confettiAnimation).assertIsDisplayed()
 
         }
     @Test
     fun shouldCheckNotExistsEmailOnMainScreen() {
+        openMainScreen()
         val testUser = TestDataId.nonRegisteredUser
-//  Наполняем экран страницей Мэйн
-        composeRule.setContent {
-            MainScreen(
-                onNavigateToLogin = {},
-                viewModel = MainViewModel()
-            )
-        }
 //  Элементы отображены на дисплее
-        composeRule.onNodeWithTag(Tags.MainScreen.screenTitle).assertIsDisplayed()
         composeRule.onNodeWithTag(Tags.MainScreen.emailTextField).assertIsDisplayed()
 //  Вводим в поле ввода данные зарег пользовтеля
         composeRule.onNodeWithTag(Tags.MainScreen.emailTextField).performTextInput(testUser.email)

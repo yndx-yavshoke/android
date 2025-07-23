@@ -21,6 +21,7 @@ class TestDataGenerator {
 //  Генерируем случайный возраст от 0 до 99
     fun generateAge(): Int = Random.nextInt(0, 100)
 
+
 //  Генерируем полный набор данных пользователя
     fun generateUserData(): TestUserData = TestUserData(
         email = generateEmail(),

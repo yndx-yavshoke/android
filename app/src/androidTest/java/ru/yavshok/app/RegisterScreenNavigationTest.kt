@@ -16,26 +16,12 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class RegisterScreenNavigationTest {
 
-//  Tags.RegistrationScreen.screenTitle
-//  Tags.RegistrationScreen.emailTextField
-//  Tags.RegistrationScreen.passwordTextField
-//  Tags.RegistrationScreen.ageTextField
-
-//  Tags.RegistrationScreen.errorMessageText
-
-//  Tags.RegistrationScreen.registrationButton
-//  Tags.RegistrationScreen.backButton
-
-//  Tags.LoginScreen.screenTitle
-//  Tags.ProfileScreen.logoutButton
-
     @get: Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
 
-//  Генерируем уникальные данные пользователя для каждого теста
     val testUser = TestDataGenerator().generateUserData()
 
-//  Предзагрузка RegistrationScreen
+
     private fun openRegistrationScreen() {
 //  Ожидание MainScreen, клик по loginButton
         composeRule.waitUntilAtLeastOneExists(
@@ -98,10 +84,6 @@ class RegisterScreenNavigationTest {
 //  Проверяем что RegistrationScreen исчезла
         composeRule.onNodeWithTag(Tags.RegistrationScreen.screenTitle).assertDoesNotExist()
 //  Выходим из ProfileScreen для других тестов
-//        composeRule.onNodeWithTag(Tags.ProfileScreen.logoutButton).performClick()
-////  Ожидание MainScreen
-//        composeRule.waitUntilAtLeastOneExists(
-//            timeoutMillis = 5_000L,
-//            matcher = hasTestTag(Tags.MainScreen.screenTitle))
+        composeRule.onNodeWithTag(Tags.ProfileScreen.logoutButton).performClick()
     }
 }

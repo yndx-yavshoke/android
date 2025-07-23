@@ -16,24 +16,11 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class LoginScreenNavigationTest {
 
-//  Tags.LoginScreen.screenTitle
-//  Tags.LoginScreenScreen.emailTextField
-//  Tags.LoginScreen.passwordTextField
-//  Tags.LoginScreen.errorMessageText
-
-//  Tags.LoginScreen.loginButton
-//  Tags.LoginScreen.backButton
-//  Tags.LoginScreen.registrationButton
-
-//  Tags.MainScreen.screenTitle
-//  Tags.RegistrationScreen.screenTitle
-
     @get: Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
 
     val testUser = TestDataId.registeredUser
 
-//  Предзагрузка LoginScreen
     private fun openLoginScreen() {
 //  Ожидание MainScreen, клик по loginButton
         composeRule.waitUntilAtLeastOneExists(
@@ -53,15 +40,13 @@ class LoginScreenNavigationTest {
     fun shouldNavigateFromLoginScreenToRegistrationScreen() {
         openLoginScreen()
 //  Элементы отображены на дисплее
-        composeRule.onNodeWithTag(Tags.LoginScreen.screenTitle).assertIsDisplayed()
         composeRule.onNodeWithTag(Tags.LoginScreen.registrationButton).assertIsDisplayed()
-//  Клиеаем по registrationButton
+//  Кликаем по registrationButton
         composeRule.onNodeWithTag(Tags.LoginScreen.registrationButton).performClick()
 //  Ожидание RegistrationScreen
         composeRule.waitUntilAtLeastOneExists(
             timeoutMillis = 5_000L,
             matcher = hasTestTag(Tags.RegistrationScreen.screenTitle))
-//        Thread.sleep(999999)
 //  Проверяем наличие титула на RegistrationScreen
         composeRule.onNodeWithTag(Tags.RegistrationScreen.screenTitle).assertIsDisplayed()
 //  Проверяем что LoginScreen исчезла
@@ -72,18 +57,15 @@ class LoginScreenNavigationTest {
     fun shouldNavigateFromLoginScreenToMainScreen() {
         openLoginScreen()
 //  Элементы отображены на дисплее
-        composeRule.onNodeWithTag(Tags.LoginScreen.screenTitle).assertIsDisplayed()
         composeRule.onNodeWithTag(Tags.LoginScreen.backButton).assertIsDisplayed()
 //  Кликаем по backButton
         composeRule.onNodeWithTag(Tags.LoginScreen.backButton).performClick()
-
 //  Ожидание MainScreen
         composeRule.waitUntilAtLeastOneExists(
             timeoutMillis = 5_000L,
             matcher = hasTestTag(Tags.MainScreen.screenTitle))
 //  Проверяем наличие титула на MainScreen
         composeRule.onNodeWithTag(Tags.MainScreen.screenTitle).assertIsDisplayed()
-//      Thread.sleep(999999)
 //  Проверяем что страница логина исчезла
         composeRule.onNodeWithTag(Tags.LoginScreen.screenTitle).assertDoesNotExist()
     }
@@ -92,11 +74,12 @@ class LoginScreenNavigationTest {
     fun shouldNavigateFromLoginScreenToProfileScreen() {
         openLoginScreen()
 //  Элементы отображены на дисплее
-        composeRule.onNodeWithTag(Tags.LoginScreen.screenTitle).assertIsDisplayed()
         composeRule.onNodeWithTag(Tags.LoginScreen.loginButton).assertIsDisplayed()
 //  Вводим в поля ввода данные зарег пользовтеля
-        composeRule.onNodeWithTag(Tags.LoginScreen.emailTextField).performTextInput(testUser.email)
-        composeRule.onNodeWithTag(Tags.LoginScreen.passwordTextField).performTextInput(testUser.password)
+        composeRule.onNodeWithTag(Tags.LoginScreen.emailTextField)
+            .performTextInput(testUser.email)
+        composeRule.onNodeWithTag(Tags.LoginScreen.passwordTextField)
+            .performTextInput(testUser.password)
 //  Кликаем по loginButton
         composeRule.onNodeWithTag(Tags.LoginScreen.loginButton).performClick()
 //  Ожидание ProfileScreen
@@ -107,7 +90,8 @@ class LoginScreenNavigationTest {
         composeRule.onNodeWithTag(Tags.ProfileScreen.editProfileButton).assertIsDisplayed()
 //  Проверяем что LoginScreen исчезла
         composeRule.onNodeWithTag(Tags.LoginScreen.screenTitle).assertDoesNotExist()
-//        Thread.sleep(999999)
+        composeRule.onNodeWithTag(Tags.ProfileScreen.logoutButton).performClick()
     }
-
 }
+
+

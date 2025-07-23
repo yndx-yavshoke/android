@@ -25,31 +25,23 @@ import ru.yavshok.app.viewmodel.ViewModelFactory
 @RunWith(AndroidJUnit4::class)
 class LoginScreenTest {
 
-//    Tags.LoginScreen.screenTitle
-//    Tags.LoginScreenScreen.emailTextField
-//    Tags.LoginScreen.passwordTextField
-
-//    Tags.LoginScreen.errorTextMessage
-
-//    Tags.LoginScreen.loginButton
-//    Tags.LoginScreen.backButton
-//    Tags.LoginScreen.registrationButton
-
-
     @get: Rule
     val composeRule = createComposeRule()
-//    val testUser = TestDataId.registeredUser
+
     val vmFactory = ViewModelFactory(ApplicationProvider.getApplicationContext())
 
-    @Test
-    fun shouldTypeEmailAndPasswordOnLoginScreen() {
-        val testUser = TestDataId.registeredUser
-//  Наполняем экран
+    private fun openLoginScreen(){
         composeRule.setContent {
             LoginScreen(
                 viewModel = viewModel(factory = vmFactory)
             )
         }
+    }
+
+    @Test
+    fun shouldTypeEmailAndPasswordOnLoginScreen() {
+        val testUser = TestDataId.registeredUser
+        openLoginScreen()
 //  Элементы отображены на дисплее
         composeRule.onNodeWithTag(Tags.LoginScreen.screenTitle).assertIsDisplayed()
         composeRule.onNodeWithTag(Tags.LoginScreen.emailTextField).assertIsDisplayed()
@@ -57,34 +49,36 @@ class LoginScreenTest {
         composeRule.onNodeWithTag(Tags.LoginScreen.loginButton).assertIsDisplayed()
         composeRule.onNodeWithTag(Tags.LoginScreen.backButton).assertIsDisplayed()
 //  Вводим в поля ввода данные зарег пользовтеля
-        composeRule.onNodeWithTag(Tags.LoginScreen.emailTextField).performTextInput(testUser.email)
-        composeRule.onNodeWithTag(Tags.LoginScreen.passwordTextField).performTextInput(testUser.password)
+        composeRule.onNodeWithTag(Tags.LoginScreen.emailTextField)
+            .performTextInput(testUser.email)
+        composeRule.onNodeWithTag(Tags.LoginScreen.passwordTextField)
+            .performTextInput(testUser.password)
 //  Проверяем что текст ввелся и отображен на экране
-        composeRule.onNodeWithTag(Tags.LoginScreen.emailTextField).assertTextContains(testUser.email)
+        composeRule.onNodeWithTag(Tags.LoginScreen.emailTextField)
+            .assertTextContains(testUser.email)
         val bulletMask = "\u2022".repeat(testUser.password.length)
-        composeRule.onNodeWithTag(Tags.LoginScreen.passwordTextField).assertTextContains(bulletMask)
+        composeRule.onNodeWithTag(Tags.LoginScreen.passwordTextField)
+            .assertTextContains(bulletMask)
     }
 
     @Test
     fun shouldTLoginNotExistsUserDataOnLoginScreen() {
         val testUser = TestDataId.nonRegisteredUser
-//  Наполняем экран
-        composeRule.setContent {
-            LoginScreen(
-                viewModel = viewModel(factory = vmFactory)
-            )
-        }
+        openLoginScreen()
 //  Элементы отображены на дисплее
-        composeRule.onNodeWithTag(Tags.LoginScreen.screenTitle).assertIsDisplayed()
         composeRule.onNodeWithTag(Tags.LoginScreen.emailTextField).assertIsDisplayed()
         composeRule.onNodeWithTag(Tags.LoginScreen.passwordTextField).assertIsDisplayed()
 //  Вводим в поля ввода данные не зарег пользовтеля
-        composeRule.onNodeWithTag(Tags.LoginScreen.emailTextField).performTextInput(testUser.email)
-        composeRule.onNodeWithTag(Tags.LoginScreen.passwordTextField).performTextInput(testUser.password)
+        composeRule.onNodeWithTag(Tags.LoginScreen.emailTextField)
+            .performTextInput(testUser.email)
+        composeRule.onNodeWithTag(Tags.LoginScreen.passwordTextField)
+            .performTextInput(testUser.password)
 //  Проверяем что текст ввелся и отображен на экране
-        composeRule.onNodeWithTag(Tags.LoginScreen.emailTextField).assertTextContains(testUser.email)
+        composeRule.onNodeWithTag(Tags.LoginScreen.emailTextField)
+            .assertTextContains(testUser.email)
         val bulletMask = "\u2022".repeat(testUser.password.length)
-        composeRule.onNodeWithTag(Tags.LoginScreen.passwordTextField).assertTextContains(bulletMask)
+        composeRule.onNodeWithTag(Tags.LoginScreen.passwordTextField)
+            .assertTextContains(bulletMask)
 //  Кликаем по loginButton
         composeRule.onNodeWithTag(Tags.LoginScreen.loginButton).performClick()
 //  Ожидание прогрузки страницы
@@ -93,19 +87,12 @@ class LoginScreenTest {
             matcher = hasTestTag(Tags.LoginScreen.errorTextMessage))
 //  Проверяем что отобразился errorTextMessage
         composeRule.onNodeWithTag(Tags.LoginScreen.errorTextMessage).assertIsDisplayed()
-//        Thread.sleep(999999)
     }
 
     @Test
     fun shouldNotPassEmptyFieldOnLoginScreen() {
-//  Наполняем экран
-        composeRule.setContent {
-            LoginScreen(
-                viewModel = viewModel(factory = vmFactory)
-            )
-        }
+        openLoginScreen()
 //  Элементы отображены на дисплее
-        composeRule.onNodeWithTag(Tags.LoginScreen.screenTitle).assertIsDisplayed()
         composeRule.onNodeWithTag(Tags.LoginScreen.emailTextField).assertIsDisplayed()
         composeRule.onNodeWithTag(Tags.LoginScreen.passwordTextField).assertIsDisplayed()
 //  Поля ввода оставляем пустыми
@@ -118,7 +105,8 @@ class LoginScreenTest {
         )
 //  Проверяем что отобразился errorTextMessage
         composeRule.onNodeWithTag(Tags.LoginScreen.errorTextMessage).assertIsDisplayed()
-//        Thread.sleep(999999)
     }
 }
+
+
 

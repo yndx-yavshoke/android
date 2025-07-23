@@ -19,11 +19,6 @@ import ru.yavshok.app.viewmodel.MainViewModel
 @RunWith(AndroidJUnit4::class)
 class MainScreenNavigationTest {
 
-    //Tags.MainScreen.screenTitle
-    //Tags.MainScreen.loginButton
-    //Tags.LoginScreen.screenTitle
-    //Tags.LoginScreen.checkButton
-
     @get: Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
 
@@ -34,11 +29,10 @@ class MainScreenNavigationTest {
             timeoutMillis = 5_000L,
             matcher = hasTestTag(Tags.MainScreen.screenTitle)
         )
-
 //  Элементы отображены на дисплее
         composeRule.onNodeWithTag(Tags.MainScreen.screenTitle).assertIsDisplayed()
         composeRule.onNodeWithTag(Tags.MainScreen.loginButton).assertIsDisplayed()
-//  Клиеаем по кнопке "В шок"
+//  Клиеаем по кнопке MainScreen
         composeRule.onNodeWithTag(Tags.MainScreen.loginButton).performClick()
 //  Ожидание прогрузки страницы
         composeRule.waitUntilAtLeastOneExists(
