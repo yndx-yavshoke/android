@@ -98,7 +98,12 @@ android {
 dependencies {
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-    
+
+    implementation("com.github.javafaker:javafaker:1.0.2")
+
+    implementation("com.google.code.gson:gson:2.10.1")
+    testImplementation("com.google.code.gson:gson:2.10.1")
+
     // Downgraded to versions compatible with compileSdk 33
     implementation("androidx.activity:activity-compose:1.7.2")
     
