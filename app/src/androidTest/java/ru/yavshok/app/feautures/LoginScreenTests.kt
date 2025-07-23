@@ -1,5 +1,6 @@
 package ru.yavshok.app.feautures
 
+import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
@@ -13,6 +14,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import ru.yavshok.app.MainActivity
+import ru.yavshok.app.data.storage.TokenStorage
 import ru.yavshok.app.screens.AppPages
 import ru.yavshok.app.ui.screens.login.LoginScreen
 import ru.yavshok.app.utils.Datas
@@ -97,6 +99,8 @@ class LoginScreenTests {
 
     @Before
     fun setUp() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        TokenStorage(context).logout()
         appPages = AppPages(composeTestRule)
     }
 

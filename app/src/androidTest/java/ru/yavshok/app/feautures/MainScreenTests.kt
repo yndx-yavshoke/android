@@ -14,6 +14,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import ru.yavshok.app.screens.AppPages
 import ru.yavshok.app.ui.screens.MainScreen
+import ru.yavshok.app.utils.Datas
+import ru.yavshok.app.utils.FakerGenerator
 
 
 @RunWith(AndroidJUnit4::class)
@@ -37,29 +39,19 @@ class MainScreenTests {
 
     @Test
     fun emailShouldExist() {
-        appPages.mainScreen.checkEmail("example@mail.ru")
-        composeTestRule.waitUntil(5000) {
-            try {
-                appPages.mainScreen.success.assertIsDisplayed()
-                true
-            } catch (e: AssertionError) {
-                false
-            }
-        }
+        appPages.mainScreen
+            .checkEmail(Datas.User.email)
+            .waitSuccessMessage()
+            .success.assertIsDisplayed()
         appPages.mainScreen.fail.assertDoesNotExist()
         }
 
     @Test
     fun emailShouldNotExist() {
-        appPages.mainScreen.checkEmail("not_exist_email@example.ru")
-        composeTestRule.waitUntil(5000) {
-            try {
-                appPages.mainScreen.fail.assertIsDisplayed()
-                true
-            } catch (e: AssertionError) {
-                false
-            }
-        }
+        appPages.mainScreen
+            .checkEmail(FakerGenerator.generateRandomEmail())
+            .waitFailMessage()
+            .fail.assertIsDisplayed()
         appPages.mainScreen.success.assertDoesNotExist()
     }
 
