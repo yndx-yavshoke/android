@@ -9,9 +9,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.yavshok.app.Tags.MainScreen.checkButton
 
 @Composable
 fun CustomButton(
@@ -25,6 +27,7 @@ fun CustomButton(
     Button(
         onClick = onClick,
         modifier = modifier
+            .testTag(checkButton)
             .fillMaxWidth()
             .height(56.dp),
         enabled = isEnabled,

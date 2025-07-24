@@ -108,6 +108,7 @@ fun MainScreen(
                         .build(),
                     contentDescription = "Happy Cat",
                     modifier = Modifier
+                        .testTag(Tags.MainScreen.happyCatImg)
                         .fillMaxWidth(0.9f)
                         .height(300.dp)
                         .padding(bottom = 16.dp),
@@ -118,7 +119,9 @@ fun MainScreen(
                     color = Color(0xFF4CAF50), // Green color
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    modifier = Modifier
+                        .testTag(Tags.MainScreen.successText)
+                        .padding(bottom = 16.dp)
                 )
                 
             }
@@ -129,7 +132,9 @@ fun MainScreen(
                         text = message,
                         color = Color.Red,
                         fontSize = 30.sp,
-                        modifier = Modifier.padding(bottom = 16.dp)
+                        modifier = Modifier
+                            .testTag(Tags.MainScreen.unsuccessText)
+                            .padding(bottom = 16.dp)
                     )
                 }
             }
