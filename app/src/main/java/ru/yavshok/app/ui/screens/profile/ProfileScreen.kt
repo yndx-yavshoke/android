@@ -2,7 +2,6 @@ package ru.yavshok.app.ui.screens.profile
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -12,10 +11,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.filled.ThumbUp
 import ru.yavshok.app.ui.icons.Logout
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -25,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -34,7 +30,11 @@ import coil.compose.AsyncImage
 import coil.decode.GifDecoder
 import coil.request.ImageRequest
 import ru.yavshok.app.R
-import ru.yavshok.app.viewmodel.ProfileUiState
+import ru.yavshok.app.Tags
+import ru.yavshok.app.Tags.ProfilePage.editProfileButton
+import ru.yavshok.app.Tags.ProfilePage.logoutButton
+import ru.yavshok.app.Tags.ProfilePage.userName
+import ru.yavshok.app.Tags.ProfilePage.userStatus
 import ru.yavshok.app.viewmodel.ProfileViewModel
 
 
@@ -126,7 +126,7 @@ private fun ProfileHeader(
                 // Profile image
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(R.drawable.profile)
+                        .data(R.drawable.photo_2)
                         .build(),
                     contentDescription = "Profile Image",
                     imageLoader = imageLoader,
@@ -146,13 +146,16 @@ private fun ProfileHeader(
                         text = profile.name,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black
+                        color = Color.Black,
+                        modifier = Modifier.testTag(userName)
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = profile.subtitle,
                         fontSize = 16.sp,
-                        color = Color.Black
+                        color = Color.Black,
+                        modifier = Modifier.testTag(userStatus)
+
                     )
                 }
             }
@@ -176,12 +179,14 @@ private fun ProfileHeader(
                  onClick = { 
                      onLogoutClick() 
                  },
+                 modifier = Modifier
+                     .size(24.dp)
+                     .testTag(logoutButton),
              ) {
                  Icon(
                      Logout,
                      contentDescription = "Logout",
-                     tint = Color.Black,
-                     modifier = Modifier.size(24.dp)
+                     tint = Color.Black
                  )
              }
          }
@@ -196,7 +201,9 @@ private fun ProfileHeader(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(35.dp),
+                .height(35.dp)
+                .testTag(Tags.ProfilePage.editProfileButton)
+                .testTag(editProfileButton),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Transparent,
                 contentColor = Color.Black

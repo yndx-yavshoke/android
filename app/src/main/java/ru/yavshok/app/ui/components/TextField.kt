@@ -26,8 +26,9 @@ fun TextField(
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        modifier = modifier.fillMaxWidth(),
-        placeholder = {
+        modifier = modifier
+            .fillMaxWidth(),
+                placeholder = {
             Text(
                 text = placeholder,
                 color = Color.Gray
