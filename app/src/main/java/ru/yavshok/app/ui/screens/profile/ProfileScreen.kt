@@ -2,9 +2,19 @@ package ru.yavshok.app.ui.screens.profile
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -12,29 +22,34 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.filled.ThumbUp
-import ru.yavshok.app.ui.icons.Logout
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.ImageLoader
 import coil.compose.AsyncImage
-import coil.decode.GifDecoder
 import coil.request.ImageRequest
 import ru.yavshok.app.R
-import ru.yavshok.app.viewmodel.ProfileUiState
+import ru.yavshok.app.Tags
+import ru.yavshok.app.ui.icons.Logout
 import ru.yavshok.app.viewmodel.ProfileViewModel
 
 
@@ -42,24 +57,18 @@ import ru.yavshok.app.viewmodel.ProfileViewModel
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel,
+    imageLoader: ImageLoader,
     onEditProfileClick: () -> Unit,
     onLogout: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
-    
+
     // Reactive refresh - update profile when screen is displayed
     LaunchedEffect(Unit) {
         viewModel.refreshProfile()
     }
-    
-    // Create ImageLoader for GIF support
-    val imageLoader = ImageLoader.Builder(context)
-        .components {
-            add(GifDecoder.Factory())
-        }
-        .build()
-    
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -83,14 +92,14 @@ fun ProfileScreen(
                     onLogoutClick = {
                         viewModel.logout()
                         onLogout()
-                    }
+                    },
                 )
-                
+
                 // Photo grid
                 PhotoGrid(photos = profile.photos)
             }
         }
-        
+
         uiState.errorMessage?.let { error ->
             Text(
                 text = error,
@@ -115,7 +124,9 @@ private fun ProfileHeader(
     ) {
         // Top row with profile info and share button
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .testTag(Tags.ProfileScreen.header)
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.Top
         ) {
@@ -131,13 +142,14 @@ private fun ProfileHeader(
                     contentDescription = "Profile Image",
                     imageLoader = imageLoader,
                     modifier = Modifier
+                        .testTag(Tags.ProfileScreen.image)
                         .size(80.dp)
                         .clip(CircleShape),
                     contentScale = ContentScale.Crop
                 )
-                
+
                 Spacer(modifier = Modifier.width(20.dp))
-                
+
                 // Name and subtitle
                 Column(
                     verticalArrangement = Arrangement.Center
@@ -146,55 +158,61 @@ private fun ProfileHeader(
                         text = profile.name,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black
+                        color = Color.Black,
+                        modifier = Modifier.testTag(Tags.ProfileScreen.name)
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = profile.subtitle,
                         fontSize = 16.sp,
-                        color = Color.Black
+                        color = Color.Black,
+                        modifier = Modifier.testTag(Tags.ProfileScreen.status)
+
                     )
                 }
             }
         }
-        
-        Spacer(modifier = Modifier.height(32.dp))
-        
-                 Row(
-             modifier = Modifier.fillMaxWidth(),
-             verticalAlignment = Alignment.CenterVertically,
-             horizontalArrangement = Arrangement.SpaceBetween
-         ) {
-             Row(
-                 horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start)
-             ) {
-                 StatItem(count = profile.postsCount, label = "Постов")
-                 StatItem(count = profile.followersCount, label = "Подписчиков")
-                 StatItem(count = profile.likesCount, label = "Лайков")
-             }
-             IconButton(
-                 onClick = { 
-                     onLogoutClick() 
-                 },
-             ) {
-                 Icon(
-                     Logout,
-                     contentDescription = "Logout",
-                     tint = Color.Black,
-                     modifier = Modifier.size(24.dp)
-                 )
-             }
-         }
 
-        
+        Spacer(modifier = Modifier.height(32.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start)
+            ) {
+                StatItem(count = profile.postsCount, label = "Постов")
+                StatItem(count = profile.followersCount, label = "Подписчиков")
+                StatItem(count = profile.likesCount, label = "Лайков")
+            }
+            IconButton(
+                onClick = {
+                    onLogoutClick()
+                },
+                modifier = Modifier.testTag(Tags.ProfileScreen.logoutIcon)
+            ) {
+                Icon(
+                    Logout,
+                    contentDescription = "Logout",
+                    tint = Color.Black,
+                    modifier = Modifier
+                        .size(24.dp)
+                )
+            }
+        }
+
+
         Spacer(modifier = Modifier.height(24.dp))
-        
+
         // Edit Profile button
         Button(
             onClick = {
                 onEditProfileClick()
             },
             modifier = Modifier
+                .testTag(Tags.ProfileScreen.editButton)
                 .fillMaxWidth()
                 .height(35.dp),
             colors = ButtonDefaults.buttonColors(
@@ -251,7 +269,7 @@ private fun PhotoGrid(photos: List<String>) {
                 "4" -> R.drawable.photo_4
                 else -> R.drawable.photo_1
             }
-            
+
             Image(
                 painter = painterResource(id = drawableRes),
                 contentDescription = "Photo $photo",

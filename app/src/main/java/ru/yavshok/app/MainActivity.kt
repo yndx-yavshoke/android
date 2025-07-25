@@ -1,38 +1,32 @@
 package ru.yavshok.app
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.runtime.*
-import android.util.Log
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
-
 import ru.yavshok.app.data.storage.TokenStorage
 import ru.yavshok.app.ui.screens.MainScreen
 import ru.yavshok.app.ui.screens.SplashScreen
 import ru.yavshok.app.ui.screens.login.LoginScreen
-import ru.yavshok.app.ui.screens.register.RegisterScreen
-import ru.yavshok.app.ui.screens.profile.ProfileScreen
 import ru.yavshok.app.ui.screens.profile.EditProfileScreen
+import ru.yavshok.app.ui.screens.profile.ProfileScreen
+import ru.yavshok.app.ui.screens.register.RegisterScreen
 import ru.yavshok.app.ui.theme.YavshokTheme
-import ru.yavshok.app.viewmodel.ViewModelFactory
-import ru.yavshok.app.viewmodel.ProfileViewModel
 import ru.yavshok.app.viewmodel.EditProfileViewModel
+import ru.yavshok.app.viewmodel.ProfileViewModel
 import ru.yavshok.app.viewmodel.SplashViewModel
+import ru.yavshok.app.viewmodel.ViewModelFactory
+
 
 enum class Screen {
     SPLASH, MAIN, LOGIN, REGISTER, PROFILE, EDIT_PROFILE
@@ -42,8 +36,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
-
         setContent {
             YavshokTheme {
                 Surface(
@@ -52,48 +44,57 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val tokenStorage = remember { TokenStorage(this@MainActivity) }
                     val viewModelFactory = remember { ViewModelFactory(this@MainActivity) }
-                    
+
                     // Simple navigation state with logging
-                    var currentScreen by remember { 
+                    var currentScreen by remember {
                         mutableStateOf(Screen.SPLASH).also {
                             Log.d("MainActivity", "🟢 Initial currentScreen set to: SPLASH")
                         }
                     }
-                    var isLoggedIn by remember { 
+                    var isLoggedIn by remember {
                         mutableStateOf(tokenStorage.isLoggedIn()).also {
-                            Log.d("MainActivity", "🟢 Initial isLoggedIn set to: ${tokenStorage.isLoggedIn()}")
+                            Log.d(
+                                "MainActivity",
+                                "🟢 Initial isLoggedIn set to: ${tokenStorage.isLoggedIn()}"
+                            )
                         }
                     }
 
 
-                    
                     // Log state changes
                     LaunchedEffect(currentScreen) {
                         Log.d("MainActivity", "🔄 Navigation changed to: ${currentScreen.name}")
                     }
-                    
+
                     LaunchedEffect(isLoggedIn) {
                         Log.d("MainActivity", "🔄 Login state changed to: $isLoggedIn")
                     }
-                    
+
                     // Note: Initial navigation now handled by SplashScreen
 
                     when (currentScreen) {
                         Screen.SPLASH -> {
                             Log.d("MainActivity", "🌟 Rendering SPLASH screen")
-                            val splashViewModel: SplashViewModel = viewModel(factory = viewModelFactory)
+                            val splashViewModel: SplashViewModel =
+                                viewModel(factory = viewModelFactory)
                             SplashScreen(
                                 viewModel = splashViewModel,
                                 onNavigate = { userIsLoggedIn ->
-                                    Log.d("MainActivity", "🚀 SPLASH navigation - isLoggedIn: $userIsLoggedIn")
+                                    Log.d(
+                                        "MainActivity",
+                                        "🚀 SPLASH navigation - isLoggedIn: $userIsLoggedIn"
+                                    )
                                     isLoggedIn = userIsLoggedIn
-                                    currentScreen = if (userIsLoggedIn) Screen.PROFILE else Screen.MAIN
+                                    currentScreen =
+                                        if (userIsLoggedIn) Screen.PROFILE else Screen.MAIN
                                 }
                             )
                         }
+
                         Screen.MAIN -> {
                             Log.d("MainActivity", "📱 Rendering MAIN screen")
-                            val mainViewModel: ru.yavshok.app.viewmodel.MainViewModel = viewModel(factory = viewModelFactory)
+                            val mainViewModel: ru.yavshok.app.viewmodel.MainViewModel =
+                                viewModel(factory = viewModelFactory)
                             MainScreen(
                                 viewModel = mainViewModel,
                                 onNavigateToLogin = {
@@ -102,9 +103,11 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
+
                         Screen.LOGIN -> {
                             Log.d("MainActivity", "🔐 Rendering LOGIN screen")
-                            val loginViewModel: ru.yavshok.app.viewmodel.LoginViewModel = viewModel(factory = viewModelFactory)
+                            val loginViewModel: ru.yavshok.app.viewmodel.LoginViewModel =
+                                viewModel(factory = viewModelFactory)
                             LoginScreen(
                                 viewModel = loginViewModel,
                                 onNavigateToRegister = {
@@ -122,8 +125,10 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
+
                         Screen.REGISTER -> {
-                            val registerViewModel: ru.yavshok.app.viewmodel.RegisterViewModel = viewModel(factory = viewModelFactory)
+                            val registerViewModel: ru.yavshok.app.viewmodel.RegisterViewModel =
+                                viewModel(factory = viewModelFactory)
                             RegisterScreen(
                                 viewModel = registerViewModel,
                                 onNavigateBack = {
@@ -135,8 +140,12 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
+
                         Screen.PROFILE -> {
-                            Log.d("MainActivity", "👤 Rendering PROFILE screen - tokenStorage.isLoggedIn(): ${tokenStorage.isLoggedIn()}")
+                            Log.d(
+                                "MainActivity",
+                                "👤 Rendering PROFILE screen - tokenStorage.isLoggedIn(): ${tokenStorage.isLoggedIn()}"
+                            )
                             if (tokenStorage.isLoggedIn()) {
                                 // Create a stable key for ViewModel scoping
                                 val profileKey = "profile_user"
@@ -146,6 +155,7 @@ class MainActivity : ComponentActivity() {
                                 )
                                 ProfileScreen(
                                     viewModel = profileViewModel,
+                                    imageLoader = ImageLoaderProvider.create(this),
                                     onEditProfileClick = {
                                         Log.d("MainActivity", "✏️ PROFILE -> EDIT_PROFILE clicked")
                                         currentScreen = Screen.EDIT_PROFILE
@@ -157,16 +167,24 @@ class MainActivity : ComponentActivity() {
                                     }
                                 )
                             } else {
-                                Log.d("MainActivity", "❌ PROFILE screen but not logged in - redirecting to MAIN")
+                                Log.d(
+                                    "MainActivity",
+                                    "❌ PROFILE screen but not logged in - redirecting to MAIN"
+                                )
                                 LaunchedEffect(Unit) {
-                                    Log.d("MainActivity", "🔄 LaunchedEffect redirecting PROFILE -> MAIN")
+                                    Log.d(
+                                        "MainActivity",
+                                        "🔄 LaunchedEffect redirecting PROFILE -> MAIN"
+                                    )
                                     currentScreen = Screen.MAIN
                                 }
                             }
                         }
+
                         Screen.EDIT_PROFILE -> {
                             Log.d("MainActivity", "✏️ Rendering EDIT_PROFILE screen")
-                            val editProfileViewModel: EditProfileViewModel = viewModel(factory = viewModelFactory)
+                            val editProfileViewModel: EditProfileViewModel =
+                                viewModel(factory = viewModelFactory)
                             EditProfileScreen(
                                 viewModel = editProfileViewModel,
                                 onNavigateBack = {

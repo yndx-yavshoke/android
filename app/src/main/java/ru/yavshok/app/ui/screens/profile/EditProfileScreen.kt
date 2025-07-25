@@ -1,19 +1,32 @@
 package ru.yavshok.app.ui.screens.profile
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ru.yavshok.app.ui.components.TextField
+import ru.yavshok.app.Tags
 import ru.yavshok.app.ui.components.Button
+import ru.yavshok.app.ui.components.TextField
 import ru.yavshok.app.viewmodel.EditProfileViewModel
 
 
@@ -59,7 +72,8 @@ fun EditProfileScreen(
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            modifier = Modifier.testTag(Tags.EditScreen.screenTitle)
         )
         
         Spacer(modifier = Modifier.height(48.dp))
@@ -83,7 +97,9 @@ fun EditProfileScreen(
                 viewModel.updateName(newValue)
             },
             placeholder = "Enter your name",
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .testTag(Tags.EditScreen.nameTextField)
+                .fillMaxWidth(),
             isError = uiState.errorMessage != null
         )
         
@@ -96,7 +112,9 @@ fun EditProfileScreen(
                 color = Color.Red,
                 fontSize = 16.sp,
                 textAlign = TextAlign.Start,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .testTag(Tags.EditScreen.errorMessage)
+                    .fillMaxWidth()
             )
         }
         
@@ -108,7 +126,9 @@ fun EditProfileScreen(
             onClick = {
                 viewModel.updateProfile()
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .testTag(Tags.EditScreen.saveButton)
+                .fillMaxWidth(),
             isEnabled = !uiState.isLoading && uiState.name.isNotBlank(),
             backgroundColor = Color(0xFF007AFF)
         )
@@ -121,7 +141,9 @@ fun EditProfileScreen(
             onClick = {
                 onNavigateBack()
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .testTag(Tags.EditScreen.cancelButton)
+                .fillMaxWidth(),
             isEnabled = !uiState.isLoading,
             backgroundColor = Color(0xFF6C757D)
         )
