@@ -1,5 +1,6 @@
 package ru.yavshok.app.ui.screens.profile
 
+import android.nfc.Tag
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -25,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -34,6 +36,7 @@ import coil.compose.AsyncImage
 import coil.decode.GifDecoder
 import coil.request.ImageRequest
 import ru.yavshok.app.R
+import ru.yavshok.app.Tags
 import ru.yavshok.app.viewmodel.ProfileUiState
 import ru.yavshok.app.viewmodel.ProfileViewModel
 
@@ -63,6 +66,7 @@ fun ProfileScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .testTag(Tags.ProfileScreen.screenContainer)
             .background(Color.White)
             .verticalScroll(rememberScrollState())
     ) {
@@ -160,11 +164,11 @@ private fun ProfileHeader(
         
         Spacer(modifier = Modifier.height(32.dp))
         
-                 Row(
-             modifier = Modifier.fillMaxWidth(),
-             verticalAlignment = Alignment.CenterVertically,
-             horizontalArrangement = Arrangement.SpaceBetween
-         ) {
+             Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+             ) {
              Row(
                  horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start)
              ) {
@@ -176,6 +180,8 @@ private fun ProfileHeader(
                  onClick = { 
                      onLogoutClick() 
                  },
+                 modifier = Modifier // аккуратно с этим
+                     .testTag(Tags.ProfileScreen.logoutButton)
              ) {
                  Icon(
                      Logout,
@@ -196,6 +202,7 @@ private fun ProfileHeader(
             },
             modifier = Modifier
                 .fillMaxWidth()
+                .testTag(Tags.ProfileScreen.editButton)
                 .height(35.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Transparent,
