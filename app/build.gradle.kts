@@ -132,7 +132,8 @@ dependencies {
     // Coil for GIF loading
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("io.coil-kt:coil-gif:2.4.0")
-    
+    implementation("androidx.test.uiautomator:uiautomator:2.3.0")
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -140,4 +141,11 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // Dotenv for Kotlin (https://github.com/cdimascio/dotenv-kotlin)
+    implementation("io.github.cdimascio:dotenv-kotlin:6.5.1")
+
+    // Faker for Kotlin and Java (https://github.com/DiUS/java-faker)
+    implementation("com.github.javafaker:javafaker:1.0.2")
+
 }

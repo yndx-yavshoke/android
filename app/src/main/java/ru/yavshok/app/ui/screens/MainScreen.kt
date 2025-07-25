@@ -143,7 +143,9 @@ fun MainScreen(
                 isEnabled = viewModel.isEmailValid() && !isLoading,
                 backgroundColor = Color(0xFF007AFF),
                 disabledBackgroundColor = Color.Gray,
-                modifier = Modifier.padding(bottom = 12.dp)
+                modifier = Modifier
+                    .testTag(Tags.MainScreen.checkEmailButton)
+                    .padding(bottom = 12.dp)
             )
             
             // "В шок" button
