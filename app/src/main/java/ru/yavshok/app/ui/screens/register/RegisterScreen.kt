@@ -20,6 +20,8 @@ import ru.yavshok.app.ui.components.TextField
 import ru.yavshok.app.ui.components.Button
 import ru.yavshok.app.viewmodel.RegisterViewModel
 import ru.yavshok.app.viewmodel.ViewModelFactory
+import androidx.compose.ui.platform.testTag
+import ru.yavshok.app.Tags
 
 
 @Composable
@@ -56,6 +58,7 @@ fun RegisterScreen(
         // Title
         Text(
             text = "Регистрация в ШОКе",
+            modifier = Modifier.testTag(Tags.RegisterScreen.screenTitle),
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black,
@@ -71,7 +74,9 @@ fun RegisterScreen(
                 viewModel.updateEmail(newValue)
             },
             placeholder = "Введите email",
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .testTag(Tags.RegisterScreen.emailTextField)
+                .fillMaxWidth(),
             isError = uiState.errorMessage != null
         )
         
@@ -84,7 +89,9 @@ fun RegisterScreen(
                 viewModel.updatePassword(newValue)
             },
             placeholder = "Пароль",
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .testTag(Tags.RegisterScreen.passwordTextField)
+                .fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
             isError = uiState.errorMessage != null
         )
@@ -98,7 +105,9 @@ fun RegisterScreen(
                 viewModel.updateAge(newValue)
             },
             placeholder = "Возраст",
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .testTag(Tags.RegisterScreen.ageTextField)
+                .fillMaxWidth(),
             isError = uiState.errorMessage != null,
             keyboardType = KeyboardType.Number
         )
@@ -112,7 +121,9 @@ fun RegisterScreen(
                 color = Color.Red,
                 fontSize = 16.sp,
                 textAlign = TextAlign.Start,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .testTag(Tags.RegisterScreen.errorMessage)
+                    .fillMaxWidth()
             )
         }
         
@@ -124,7 +135,9 @@ fun RegisterScreen(
             onClick = {
                 viewModel.register()
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .testTag(Tags.RegisterScreen.registerButton)
+                .fillMaxWidth(),
             isEnabled = !uiState.isLoading,
             backgroundColor = Color(0xFF007AFF)
         )
@@ -137,7 +150,9 @@ fun RegisterScreen(
             onClick = {
                 onNavigateBack()
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .testTag(Tags.RegisterScreen.backButton)
+                .fillMaxWidth(),
             isEnabled = !uiState.isLoading,
             backgroundColor = Color(0xFF6C757D)
         )
