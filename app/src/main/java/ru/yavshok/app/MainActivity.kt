@@ -39,6 +39,12 @@ enum class Screen {
 }
 
 class MainActivity : ComponentActivity() {
+
+    private val isTest by lazy {
+        intent?.getBooleanExtra("IS_TEST_MODE", false) ?: false
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -154,7 +160,8 @@ class MainActivity : ComponentActivity() {
                                         Log.d("MainActivity", "🚪 LOGOUT clicked - clearing state")
                                         isLoggedIn = false
                                         currentScreen = Screen.MAIN
-                                    }
+                                    },
+                                    isTest = isTest
                                 )
                             } else {
                                 Log.d("MainActivity", "❌ PROFILE screen but not logged in - redirecting to MAIN")

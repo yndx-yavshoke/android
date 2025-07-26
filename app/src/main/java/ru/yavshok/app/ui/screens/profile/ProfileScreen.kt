@@ -21,6 +21,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import ru.yavshok.app.Tags
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -43,7 +45,8 @@ import ru.yavshok.app.viewmodel.ProfileViewModel
 fun ProfileScreen(
     viewModel: ProfileViewModel,
     onEditProfileClick: () -> Unit,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    isTest: Boolean = false
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
@@ -83,7 +86,8 @@ fun ProfileScreen(
                     onLogoutClick = {
                         viewModel.logout()
                         onLogout()
-                    }
+                    },
+                    isTest = isTest
                 )
                 
                 // Photo grid
@@ -106,12 +110,14 @@ private fun ProfileHeader(
     profile: ru.yavshok.app.data.model.Profile,
     imageLoader: ImageLoader,
     onEditProfileClick: () -> Unit,
-    onLogoutClick: () -> Unit
+    onLogoutClick: () -> Unit,
+    isTest: Boolean = false
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
+            .testTag(Tags.ProfileScreen.screenContainer)
     ) {
         // Top row with profile info and share button
         Row(
@@ -124,17 +130,28 @@ private fun ProfileHeader(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // Profile image
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(R.drawable.profile)
-                        .build(),
-                    contentDescription = "Profile Image",
-                    imageLoader = imageLoader,
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clip(CircleShape),
-                    contentScale = ContentScale.Crop
-                )
+                if (isTest) {
+                    Image(
+                        painter = painterResource(id = R.drawable.test_profile_stub),
+                        contentDescription = "Profile Image",
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop
+                    )
+                } else {
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(R.drawable.profile)
+                            .build(),
+                        contentDescription = "Profile Image",
+                        imageLoader = imageLoader,
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop
+                    )
+                }
                 
                 Spacer(modifier = Modifier.width(20.dp))
                 
@@ -146,13 +163,17 @@ private fun ProfileHeader(
                         text = profile.name,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black
+                        color = Color.Black,
+                        modifier = Modifier
+                            .testTag(Tags.ProfileScreen.catName)
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = profile.subtitle,
                         fontSize = 16.sp,
-                        color = Color.Black
+                        color = Color.Black,
+                        modifier = Modifier
+                            .testTag(Tags.ProfileScreen.catAge)
                     )
                 }
             }
@@ -176,6 +197,7 @@ private fun ProfileHeader(
                  onClick = { 
                      onLogoutClick() 
                  },
+                 modifier = Modifier.testTag(Tags.ProfileScreen.logoutButton)
              ) {
                  Icon(
                      Logout,
@@ -196,7 +218,8 @@ private fun ProfileHeader(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(35.dp),
+                .height(35.dp)
+                .testTag(Tags.ProfileScreen.editButton),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Transparent,
                 contentColor = Color.Black
