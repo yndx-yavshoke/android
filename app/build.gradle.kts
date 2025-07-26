@@ -145,4 +145,7 @@ dependencies {
     androidTestImplementation("androidx.test:rules:1.5.0")
     androidTestImplementation("androidx.test:core:1.5.0")
     androidTestImplementation("androidx.test:core-ktx:1.5.0")
+    androidTestImplementation("com.github.javafaker:javafaker:1.0.2")
+    androidTestImplementation("io.github.serpro69:kotlin-faker:1.14.0")
+
 }

@@ -10,14 +10,13 @@ import org.junit.runner.RunWith
 import ru.yavshok.app.screens.MainScreenPageObject
 import ru.yavshok.app.ui.screens.MainScreen
 import ru.yavshok.app.utils.Datas
-import ru.yavshok.app.utils.FakerGenerator
-
 
 @RunWith(AndroidJUnit4::class)
 class MainScreenTests {
 
     @get: Rule
     val composeTestRule  = createComposeRule()
+
 
     private lateinit var mainScreen: MainScreenPageObject
 
@@ -43,7 +42,7 @@ class MainScreenTests {
     @Test
     fun emailShouldNotExist() {
         mainScreen
-            .checkEmail(FakerGenerator.generateRandomEmail())
+            .checkEmail(Datas.FakeUser.email())
             .waitFailMessage()
             .assertFailMessage()
     }

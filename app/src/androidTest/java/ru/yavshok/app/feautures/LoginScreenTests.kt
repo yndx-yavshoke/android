@@ -17,8 +17,6 @@ import ru.yavshok.app.screens.AppPages
 import ru.yavshok.app.screens.LoginScreenPageObject
 import ru.yavshok.app.ui.screens.login.LoginScreen
 import ru.yavshok.app.utils.Datas
-import ru.yavshok.app.utils.FakerGenerator.generateRandomEmail
-import ru.yavshok.app.utils.FakerGenerator.generateRandomPassword
 import ru.yavshok.app.utils.TestHelper.launchMainActivityInTestMode
 import ru.yavshok.app.viewmodel.ViewModelFactory
 import ru.yavshok.app.viewmodel.LoginViewModel
@@ -51,7 +49,7 @@ class LoginScreenTestsWithContent {
     fun shouldNotEnterWithWrongPassword() {
         val error = "Неверный email или пароль"
         loginScreen
-            .loginShock(Datas.User.email, generateRandomPassword())
+            .loginShock(Datas.User.email, Datas.FakeUser.password())
             .waitErrorMessage(error)
             .assertErrorMessage(error)
     }
@@ -60,7 +58,7 @@ class LoginScreenTestsWithContent {
     fun shouldNotEnterWithWrongEmail() {
         val error = "Неверный email или пароль"
         loginScreen
-            .loginShock(generateRandomEmail(), generateRandomPassword())
+            .loginShock(Datas.FakeUser.email(), Datas.FakeUser.password())
             .waitErrorMessage(error)
             .assertErrorMessage(error)
     }
@@ -69,7 +67,7 @@ class LoginScreenTestsWithContent {
     fun shouldNotEnterWithoutPassword() {
         val error = "Заполните все поля"
         loginScreen
-            .loginShock(generateRandomEmail(), "")
+            .loginShock(Datas.FakeUser.email(), "")
             .waitErrorMessage(error)
             .assertErrorMessage(error)
     }
