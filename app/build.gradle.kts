@@ -128,7 +128,10 @@ dependencies {
     
     // Konfetti for confetti animation
     implementation("nl.dionsegijn:konfetti-compose:2.0.5")
-    
+
+    implementation("com.github.javafaker:javafaker:1.0.2")
+    implementation("io.github.cdimascio:dotenv-kotlin:6.5.1")
+
     // Coil for GIF loading
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("io.coil-kt:coil-gif:2.4.0")
