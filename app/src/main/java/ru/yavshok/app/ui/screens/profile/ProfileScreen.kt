@@ -25,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -34,6 +35,7 @@ import coil.compose.AsyncImage
 import coil.decode.GifDecoder
 import coil.request.ImageRequest
 import ru.yavshok.app.R
+import ru.yavshok.app.Tags
 import ru.yavshok.app.viewmodel.ProfileUiState
 import ru.yavshok.app.viewmodel.ProfileViewModel
 
@@ -62,6 +64,7 @@ fun ProfileScreen(
     
     Column(
         modifier = Modifier
+            .testTag(Tags.ProfileScreen.screenContainer)
             .fillMaxSize()
             .background(Color.White)
             .verticalScroll(rememberScrollState())
@@ -110,6 +113,7 @@ private fun ProfileHeader(
 ) {
     Column(
         modifier = Modifier
+            .testTag(Tags.ProfileScreen.screenContainerHeader)
             .fillMaxWidth()
             .padding(16.dp)
     ) {
@@ -126,11 +130,12 @@ private fun ProfileHeader(
                 // Profile image
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(R.drawable.profile)
+                        .data(R.drawable.profile_static)
                         .build(),
                     contentDescription = "Profile Image",
-                    imageLoader = imageLoader,
+//                    imageLoader = imageLoader,
                     modifier = Modifier
+                        .testTag(Tags.ProfileScreen.profileImage)
                         .size(80.dp)
                         .clip(CircleShape),
                     contentScale = ContentScale.Crop
@@ -146,7 +151,8 @@ private fun ProfileHeader(
                         text = profile.name,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black
+                        color = Color.Black,
+                        modifier = Modifier.testTag(Tags.ProfileScreen.profileName)
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
@@ -176,6 +182,7 @@ private fun ProfileHeader(
                  onClick = { 
                      onLogoutClick() 
                  },
+                 modifier = Modifier.testTag(Tags.ProfileScreen.logoutButton)
              ) {
                  Icon(
                      Logout,
@@ -195,6 +202,7 @@ private fun ProfileHeader(
                 onEditProfileClick()
             },
             modifier = Modifier
+                .testTag(Tags.ProfileScreen.editProfileButton)
                 .fillMaxWidth()
                 .height(35.dp),
             colors = ButtonDefaults.buttonColors(
