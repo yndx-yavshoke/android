@@ -1,14 +1,12 @@
 package ru.yavshok.app.feautures
 
 import android.content.Context
-import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsEnabled
-import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -16,10 +14,12 @@ import org.junit.runner.RunWith
 import ru.yavshok.app.MainActivity
 import ru.yavshok.app.data.storage.TokenStorage
 import ru.yavshok.app.screens.AppPages
+import ru.yavshok.app.screens.LoginScreenPageObject
 import ru.yavshok.app.ui.screens.login.LoginScreen
 import ru.yavshok.app.utils.Datas
 import ru.yavshok.app.utils.FakerGenerator.generateRandomEmail
 import ru.yavshok.app.utils.FakerGenerator.generateRandomPassword
+import ru.yavshok.app.utils.TestHelper.launchMainActivityInTestMode
 import ru.yavshok.app.viewmodel.ViewModelFactory
 import ru.yavshok.app.viewmodel.LoginViewModel
 
@@ -28,9 +28,9 @@ import ru.yavshok.app.viewmodel.LoginViewModel
 class LoginScreenTestsWithContent {
 
     @get: Rule
-    val composeTestRule  = createAndroidComposeRule<ComponentActivity>()
+    val composeTestRule  = createComposeRule()
 
-    private lateinit var appPages: AppPages
+    private lateinit var loginScreen: LoginScreenPageObject
 
     @Before
     fun setUp() {
@@ -44,48 +44,54 @@ class LoginScreenTestsWithContent {
                 viewModel = loginViewModel
             )
         }
-        appPages = AppPages(composeTestRule)
+        loginScreen = LoginScreenPageObject(composeTestRule)
     }
 
     @Test
     fun shouldNotEnterWithWrongPassword() {
-        appPages.loginScreen.loginShock(Datas.User.email, generateRandomPassword())
-        composeTestRule.waitUntil(5000) {
-            try {
-                composeTestRule.onNodeWithText("Неверный email или пароль").assertIsDisplayed()
-                true
-            } catch (e: AssertionError) {
-                false
-            }
-        }
+        val error = "Неверный email или пароль"
+        loginScreen
+            .loginShock(Datas.User.email, generateRandomPassword())
+            .waitErrorMessage(error)
+            .assertErrorMessage(error)
     }
 
     @Test
     fun shouldNotEnterWithWrongEmail() {
-        appPages.loginScreen.loginShock(generateRandomEmail(), generateRandomPassword())
-        composeTestRule.waitUntil(10000) {
-            try {
-                composeTestRule.onNodeWithText("Неверный email или пароль").assertIsDisplayed()
-                true
-            } catch (e: AssertionError) {
-                false
-            }
-        }
+        val error = "Неверный email или пароль"
+        loginScreen
+            .loginShock(generateRandomEmail(), generateRandomPassword())
+            .waitErrorMessage(error)
+            .assertErrorMessage(error)
+    }
+
+    @Test
+    fun shouldNotEnterWithoutPassword() {
+        val error = "Заполните все поля"
+        loginScreen
+            .loginShock(generateRandomEmail(), "")
+            .waitErrorMessage(error)
+            .assertErrorMessage(error)
+    }
+
+    @Test
+    fun shouldNotEnterWithInvalidEmail() {
+        val error = "Неверный формат email"
+        loginScreen
+            .loginShock(" " + Datas.User.email, Datas.User.password)
+            .waitErrorMessage(error)
+            .assertErrorMessage(error)
     }
 
     @Test
     fun checkAllElementsOnLoginScreen() {
-        appPages.loginScreen.title.assertIsDisplayed()
-        appPages.loginScreen.emailField.assertIsDisplayed()
-        appPages.loginScreen.emailField.assertTextContains("Email")
-        appPages.loginScreen.passwordField.assertIsDisplayed()
-        appPages.loginScreen.passwordField.assertTextContains("Пароль")
-        appPages.loginScreen.backButton.assertIsEnabled()
-        appPages.loginScreen.backButton.assertTextContains("Назад")
-        appPages.loginScreen.registerButton.assertIsEnabled()
-        appPages.loginScreen.registerButton.assertTextContains("Регистрация")
-        appPages.loginScreen.loginButton.assertIsEnabled()
-        appPages.loginScreen.loginButton.assertTextContains("В шок")
+        loginScreen
+            .assertTitle()
+            .assertEmailField()
+            .assertPasswordField()
+            .assertLoginButton()
+            .assertRegisterButton()
+            .assertBackButton()
     }
 }
 
@@ -94,6 +100,7 @@ class LoginScreenTests {
 
     @get: Rule
     val composeTestRule  = createAndroidComposeRule<MainActivity>()
+    private lateinit var scenario: ActivityScenario<MainActivity>
 
     private lateinit var appPages: AppPages
 
@@ -102,36 +109,27 @@ class LoginScreenTests {
         val context = ApplicationProvider.getApplicationContext<Context>()
         TokenStorage(context).logout()
         appPages = AppPages(composeTestRule)
+        scenario = launchMainActivityInTestMode()
+    }
+
+    @After
+    fun tearDown() {
+        scenario.close()
     }
 
     @Test
     fun shouldEnterProfile() {
-        composeTestRule.waitUntil(15000) {
-            try {
-                appPages.mainScreen.title.assertExists()
-                true
-            } catch (e: AssertionError) {
-                false
-            }
-        }
-        appPages.mainScreen.clickToLogin()
-        composeTestRule.waitUntil(5000) {
-            try {
-                appPages.loginScreen.title.assertExists()
-                true
-            } catch (e: AssertionError) {
-                false
-            }
-        }
-        appPages.loginScreen.loginShock(Datas.User.email, Datas.User.password)
-        composeTestRule.waitUntil(5000) {
-            try {
-                appPages.profileScreen.catName.assertIsDisplayed()
-                true
-            } catch (e: AssertionError) {
-                false
-            }
-        }
-        appPages.profileScreen.catAge.assertIsDisplayed()
+        appPages.profileScreen.disableAnimations()
+        appPages.mainScreen
+            .waitTitle()
+            .clickToLogin()
+        appPages.loginScreen
+            .waitScreenTitle()
+            .loginShock(
+                Datas.User.email,
+                Datas.User.password
+            )
+        appPages.profileScreen
+            .waitCatName()
     }
 }

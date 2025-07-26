@@ -1,13 +1,17 @@
 package ru.yavshok.app.utils
 
 import android.content.Context
+import android.content.Intent
+import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import kotlinx.coroutines.runBlocking
+import ru.yavshok.app.MainActivity
 import ru.yavshok.app.data.network.NetworkModule
 import ru.yavshok.app.data.repository.AuthRepository
 import ru.yavshok.app.data.storage.TokenStorage
 import ru.yavshok.app.data.store.UserStore
 
-object TestAuthHelper {
+object TestHelper {
     fun loginAndPrepareUser(
         context: Context,
         email: String,
@@ -28,5 +32,12 @@ object TestAuthHelper {
         userStore.setUser(user)
 
         tokenStorage to userStore
+    }
+
+    fun launchMainActivityInTestMode(): ActivityScenario<MainActivity> {
+        val intent = Intent(ApplicationProvider.getApplicationContext(), MainActivity::class.java).apply {
+            putExtra("IS_TEST_MODE", true)
+        }
+        return ActivityScenario.launch(intent)
     }
 }
