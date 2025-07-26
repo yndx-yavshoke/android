@@ -11,60 +11,78 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import ru.yavshok.app.MainActivity
-import ru.yavshok.app.ui.screens.profile.ProfileScreen
-import ru.yavshok.app.viewmodel.ProfileViewModel
 import ru.yavshok.app.data.repository.AuthRepository
-import ru.yavshok.app.data.repository.ExperimentRepository
 import ru.yavshok.app.data.network.NetworkModule
+import ru.yavshok.app.data.repository.UserRepository
 import ru.yavshok.app.data.storage.TokenStorage
 import ru.yavshok.app.screens.AppPages
-import ru.yavshok.app.screens.ProfileScreenPageObject
+import ru.yavshok.app.screens.EditorScreenPageObject
+import ru.yavshok.app.ui.screens.profile.EditProfileScreen
 import ru.yavshok.app.utils.Datas
 import ru.yavshok.app.utils.TestHelper
 import ru.yavshok.app.utils.TestHelper.launchMainActivityInTestMode
+import ru.yavshok.app.viewmodel.EditProfileViewModel
 
 @RunWith(AndroidJUnit4::class)
-class ProfileScreenTestsWithSetContent {
+class EditeScreenTestsWithSetContent {
 
     @get: Rule
     val composeTestRule  = createComposeRule()
 
-    private lateinit var profileScreen: ProfileScreenPageObject
+    private lateinit var editScreen: EditorScreenPageObject
 
     @Before
     fun setUp() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val (tokenStorage, userStore) = TestHelper.loginAndPrepareUser(context, Datas.User.email, Datas.User.password)
         val authRepository = AuthRepository(NetworkModule.provideApiService())
-        val experimentRepository = ExperimentRepository(NetworkModule.provideApiService(), context)
-        val profileViewModel = ProfileViewModel(
+        val userRepository = UserRepository(NetworkModule.provideUserApiService(context))
+        val editProfileViewModel = EditProfileViewModel(
             tokenStorage = tokenStorage,
             authRepository = authRepository,
-            experimentRepository = experimentRepository,
+            userRepository = userRepository,
             userStore = userStore
         )
         composeTestRule.setContent {
-            ProfileScreen(
-                viewModel = profileViewModel,
-                onEditProfileClick = {},
-                onLogout = {},
-                isTest = true
+            EditProfileScreen(
+                onNavigateBack = {},
+                onProfileUpdated = {},
+                viewModel = editProfileViewModel
             )
         }
-        profileScreen = ProfileScreenPageObject(composeTestRule)
+        editScreen = EditorScreenPageObject(composeTestRule)
     }
 
     @Test
-    fun checkAllElementsOnProfileScreen() {
-        profileScreen
-            .assertCatAge()
-            .assertEditButton()
-            .assertLogoutButton()
+    fun shouldNotAcceptTooLongName() {
+        val error = "Name must be 50 characters or less"
+        editScreen
+            .changeName(Datas.FakeUser.longName(51))
+            .waitErrorMessage(error)
+            .assertErrorMessage(error)
+    }
+
+    @Test
+    fun shouldNotAcceptEmptyName() {
+        editScreen
+            .enterName("")
+            .assertSaveButtonIsNotEnabled()
+    }
+
+    @Test
+    fun checkAllElementsOnEditScreen() {
+        editScreen
+            .assertTitle()
+            .assertFieldTitle()
+            .assertSaveButtonIsEnabled()
+            .enterName("")
+            .assertNameField()
+            .assertCancelButton()
     }
 }
 
 @RunWith(AndroidJUnit4::class)
-class ProfileScreenTests {
+class EditeScreenTests {
 
     @get: Rule
     val composeTestRule  = createAndroidComposeRule<MainActivity>()
@@ -81,7 +99,8 @@ class ProfileScreenTests {
     }
 
     @Test
-    fun shouldLogout() {
+    fun shouldChangeName() {
+        val newName = Datas.FakeUser.name()
         appPages.mainScreen
             .waitTitle()
             .clickToLogin()
@@ -92,10 +111,14 @@ class ProfileScreenTests {
 
         appPages.profileScreen
             .waitCatName()
-            .clickLogout()
+            .clickEdit()
 
-        appPages.mainScreen
+        appPages.editorScreen
             .waitTitle()
-            .assertTitle()
+            .changeName(newName)
+
+        appPages.profileScreen
+            .waitCatName()
+            .assertCatName(newName)
     }
 }

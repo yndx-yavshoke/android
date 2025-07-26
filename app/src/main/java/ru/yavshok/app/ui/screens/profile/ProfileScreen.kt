@@ -197,14 +197,13 @@ private fun ProfileHeader(
                  onClick = { 
                      onLogoutClick() 
                  },
+                 modifier = Modifier.testTag(Tags.ProfileScreen.logoutButton)
              ) {
                  Icon(
                      Logout,
                      contentDescription = "Logout",
                      tint = Color.Black,
-                     modifier = Modifier
-                         .size(24.dp)
-                         .testTag(Tags.ProfileScreen.logoutButton)
+                     modifier = Modifier.size(24.dp)
                  )
              }
          }

@@ -5,13 +5,10 @@
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="Tests in 'ru.yavshok.app'">
+      <SelectionState runConfigName="Tests in 'ru.yavshok.app.feautures'">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="LoginScreenTestsWithContent">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="shouldNotEnterWithWrongEmail()">
+      <SelectionState runConfigName="checkAllElementsOnProfileScreen()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

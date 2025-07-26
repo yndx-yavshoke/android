@@ -1,5 +1,6 @@
 package ru.yavshok.app.utils
 
+import android.health.connect.datatypes.units.Length
 import io.github.serpro69.kfaker.faker
 
 object Datas {
@@ -29,5 +30,7 @@ object Datas {
         fun age(): String = faker.random.nextInt(0..99).toString()
 
         fun name(): String = ruFaker.name.name()
+
+        fun longName(length: Int): String = ruFaker.random.randomString(length)
     }
 }

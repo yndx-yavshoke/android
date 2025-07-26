@@ -117,16 +117,18 @@ class LoginScreenTests {
 
     @Test
     fun shouldEnterProfile() {
-        appPages.profileScreen.disableAnimations()
+
         appPages.mainScreen
             .waitTitle()
             .clickToLogin()
+
         appPages.loginScreen
             .waitScreenTitle()
             .loginShock(
                 Datas.User.email,
                 Datas.User.password
             )
+
         appPages.profileScreen
             .waitCatName()
     }
