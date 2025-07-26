@@ -25,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -34,6 +35,7 @@ import coil.compose.AsyncImage
 import coil.decode.GifDecoder
 import coil.request.ImageRequest
 import ru.yavshok.app.R
+import ru.yavshok.app.Tags
 import ru.yavshok.app.viewmodel.ProfileUiState
 import ru.yavshok.app.viewmodel.ProfileViewModel
 
@@ -64,6 +66,7 @@ fun ProfileScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
+            .testTag(Tags.ProfileScreen.screenContainer)
             .verticalScroll(rememberScrollState())
     ) {
         if (uiState.isLoading) {
@@ -126,10 +129,9 @@ private fun ProfileHeader(
                 // Profile image
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(R.drawable.profile)
+                        .data(R.drawable.profile_test)
                         .build(),
                     contentDescription = "Profile Image",
-                    imageLoader = imageLoader,
                     modifier = Modifier
                         .size(80.dp)
                         .clip(CircleShape),
@@ -146,13 +148,17 @@ private fun ProfileHeader(
                         text = profile.name,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black
+                        color = Color.Black,
+                        modifier = Modifier
+                            .testTag(Tags.ProfileScreen.nameText)
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = profile.subtitle,
                         fontSize = 16.sp,
-                        color = Color.Black
+                        color = Color.Black,
+                        modifier = Modifier
+                            .testTag(Tags.ProfileScreen.subtitleText)
                     )
                 }
             }
@@ -173,6 +179,8 @@ private fun ProfileHeader(
                  StatItem(count = profile.likesCount, label = "Лайков")
              }
              IconButton(
+                 modifier = Modifier
+                     .testTag(Tags.ProfileScreen.logoutButton),
                  onClick = { 
                      onLogoutClick() 
                  },
@@ -196,7 +204,8 @@ private fun ProfileHeader(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(35.dp),
+                .height(35.dp)
+                .testTag(Tags.ProfileScreen.editButton),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Transparent,
                 contentColor = Color.Black

@@ -1,0 +1,5 @@
+EMAIL=testtest@test.test
+PASSWORD=123456
+WRONG_PASSWORD=654321
+DEFAULT_NAME=Tester
+EDIT_NAME=Edit tester
