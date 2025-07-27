@@ -129,7 +129,9 @@ fun MainScreen(
                         text = message,
                         color = Color.Red,
                         fontSize = 30.sp,
-                        modifier = Modifier.padding(bottom = 16.dp)
+                        modifier = Modifier
+                            .testTag(Tags.MainScreen.errorMessage)
+                            .padding(bottom = 16.dp)
                     )
                 }
             }
@@ -143,7 +145,9 @@ fun MainScreen(
                 isEnabled = viewModel.isEmailValid() && !isLoading,
                 backgroundColor = Color(0xFF007AFF),
                 disabledBackgroundColor = Color.Gray,
-                modifier = Modifier.padding(bottom = 12.dp)
+                modifier = Modifier
+                    .testTag(Tags.MainScreen.checkButton)
+                    .padding(bottom = 12.dp)
             )
             
             // "В шок" button

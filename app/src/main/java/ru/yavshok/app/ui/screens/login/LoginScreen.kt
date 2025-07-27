@@ -85,7 +85,9 @@ fun LoginScreen(
                 viewModel.updateEmail(newValue)
             },
             placeholder = "Email",
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .testTag(Tags.LoginScreen.emailTextField)
+                .fillMaxWidth(),
             isError = uiState.errorMessage != null
         )
         
@@ -98,7 +100,9 @@ fun LoginScreen(
                 viewModel.updatePassword(newValue)
             },
             placeholder = "Пароль",
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .testTag(Tags.LoginScreen.passwordTextField)
+                .fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
             isError = uiState.errorMessage != null
         )
@@ -129,7 +133,9 @@ fun LoginScreen(
                             onClick = {
                 viewModel.login()
             },
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .testTag(Tags.LoginScreen.loginButton)
+                    .weight(1f),
                 isEnabled = !uiState.isLoading,
                 backgroundColor = Color(0xFF007AFF)
             )
@@ -154,7 +160,9 @@ fun LoginScreen(
             onClick = {
                 onNavigateToRegister()
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .testTag(Tags.LoginScreen.registrationButton)
+                .fillMaxWidth(),
             isEnabled = !uiState.isLoading,
             backgroundColor = Color(0xFF007AFF)
         )
