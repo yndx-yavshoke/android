@@ -82,11 +82,13 @@ fun EditProfileScreen(
             onValueChange = { newValue ->
                 viewModel.updateName(newValue)
             },
-            placeholder = "Enter your name",
+            placeholder = {
+                Text("Enter your name")
+            },
             modifier = Modifier.fillMaxWidth(),
             isError = uiState.errorMessage != null
         )
-        
+
         Spacer(modifier = Modifier.height(16.dp))
         
         // Error message

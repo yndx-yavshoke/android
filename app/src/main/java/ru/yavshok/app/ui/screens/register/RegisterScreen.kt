@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -70,8 +71,12 @@ fun RegisterScreen(
             onValueChange = { newValue ->
                 viewModel.updateEmail(newValue)
             },
-            placeholder = "Введите email",
-            modifier = Modifier.fillMaxWidth(),
+            placeholder = {
+                Text("Введите Email")
+            },
+            modifier = Modifier
+                .testTag("RegisterEmailField")
+                .fillMaxWidth(),
             isError = uiState.errorMessage != null
         )
         
@@ -83,8 +88,12 @@ fun RegisterScreen(
             onValueChange = { newValue ->
                 viewModel.updatePassword(newValue)
             },
-            placeholder = "Пароль",
-            modifier = Modifier.fillMaxWidth(),
+            placeholder = {
+                Text("Пароль")
+            },
+            modifier = Modifier
+                .testTag("RegisterPasswordField")
+                .fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
             isError = uiState.errorMessage != null
         )
@@ -97,8 +106,12 @@ fun RegisterScreen(
             onValueChange = { newValue ->
                 viewModel.updateAge(newValue)
             },
-            placeholder = "Возраст",
-            modifier = Modifier.fillMaxWidth(),
+            placeholder = {
+                Text("Возраст")
+            },
+            modifier = Modifier
+                .testTag("RegisterAgeField")
+                .fillMaxWidth(),
             isError = uiState.errorMessage != null,
             keyboardType = KeyboardType.Number
         )
@@ -112,7 +125,9 @@ fun RegisterScreen(
                 color = Color.Red,
                 fontSize = 16.sp,
                 textAlign = TextAlign.Start,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .testTag("errorMessage")
+                    .fillMaxWidth()
             )
         }
         
@@ -124,7 +139,9 @@ fun RegisterScreen(
             onClick = {
                 viewModel.register()
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .testTag("RegisterSubmitButton")
+                .fillMaxWidth(),
             isEnabled = !uiState.isLoading,
             backgroundColor = Color(0xFF007AFF)
         )
@@ -137,7 +154,9 @@ fun RegisterScreen(
             onClick = {
                 onNavigateBack()
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .testTag("RegisterGoBackButton")
+                .fillMaxWidth(),
             isEnabled = !uiState.isLoading,
             backgroundColor = Color(0xFF6C757D)
         )
@@ -147,7 +166,9 @@ fun RegisterScreen(
         // Loading indicator
         if (uiState.isLoading) {
             CircularProgressIndicator(
-                modifier = Modifier.size(32.dp),
+                modifier = Modifier
+                    .testTag("RegisterProgressIndicator")
+                    .size(32.dp),
                 color = Color(0xFF007AFF)
             )
         }
