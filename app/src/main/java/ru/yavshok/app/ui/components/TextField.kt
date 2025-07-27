@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 fun TextField(
     value: String,
     onValueChange: (String) -> Unit,
-    placeholder: String,
+    placeholder: @Composable (() -> Unit)? = null,
     modifier: Modifier = Modifier,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     isError: Boolean = false,
@@ -27,12 +27,7 @@ fun TextField(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier.fillMaxWidth(),
-        placeholder = {
-            Text(
-                text = placeholder,
-                color = Color.Gray
-            )
-        },
+        placeholder = placeholder,
         visualTransformation = visualTransformation,
         isError = isError,
         singleLine = true,
@@ -47,4 +42,4 @@ fun TextField(
             errorTextColor = Color.Black
         )
     )
-} 
+}

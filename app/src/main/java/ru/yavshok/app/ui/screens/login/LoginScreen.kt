@@ -84,8 +84,12 @@ fun LoginScreen(
             onValueChange = { newValue ->
                 viewModel.updateEmail(newValue)
             },
-            placeholder = "Email",
-            modifier = Modifier.fillMaxWidth(),
+            placeholder = {
+                Text("Введите Email")
+            },
+            modifier = Modifier
+                .testTag("LoginEmailField")
+                .fillMaxWidth(),
             isError = uiState.errorMessage != null
         )
         
@@ -97,8 +101,12 @@ fun LoginScreen(
             onValueChange = { newValue ->
                 viewModel.updatePassword(newValue)
             },
-            placeholder = "Пароль",
-            modifier = Modifier.fillMaxWidth(),
+            placeholder = {
+                Text("Пароль")
+            },
+            modifier = Modifier
+                .testTag("LoginPasswordField")
+                .fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
             isError = uiState.errorMessage != null
         )
@@ -112,7 +120,9 @@ fun LoginScreen(
                 color = Color.Red,
                 fontSize = 16.sp,
                 textAlign = TextAlign.Start,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .testTag("LoginErrorMessage")
+                    .fillMaxWidth()
             )
         }
         
@@ -129,18 +139,22 @@ fun LoginScreen(
                             onClick = {
                 viewModel.login()
             },
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .testTag("LoginSubmitButton")
+                    .weight(1f),
                 isEnabled = !uiState.isLoading,
                 backgroundColor = Color(0xFF007AFF)
             )
             
             // Back button
             Button(
-                        text = "Назад",
-        onClick = {
-            onNavigateBack()
+                text = "Назад",
+                            onClick = {
+                onNavigateBack()
         },
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .testTag("LoginGoBackButton")
+                    .weight(1f),
                 isEnabled = !uiState.isLoading,
                 backgroundColor = Color(0xFF6C757D)
             )
@@ -154,7 +168,9 @@ fun LoginScreen(
             onClick = {
                 onNavigateToRegister()
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .testTag("LoginGoToRegisterButton")
+                .fillMaxWidth(),
             isEnabled = !uiState.isLoading,
             backgroundColor = Color(0xFF007AFF)
         )

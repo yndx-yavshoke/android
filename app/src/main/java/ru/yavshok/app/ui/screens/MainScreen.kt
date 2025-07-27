@@ -1,5 +1,6 @@
 package ru.yavshok.app.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -47,6 +49,9 @@ fun MainScreen(
     val isLoading by viewModel.isLoading
     val errorMessage by viewModel.errorMessage
     val isEmailExists by viewModel.isEmailExists
+    LaunchedEffect(isEmailExists) {
+        Log.d("🧪 TestLog", "isEmailExists = $isEmailExists")
+    }
     val showConfetti by viewModel.showConfetti
 
     val context = LocalContext.current
@@ -85,14 +90,16 @@ fun MainScreen(
                     .padding(bottom = 48.dp)
                     .testTag(Tags.MainScreen.screenTitle)
             )
-            
+
             // Email input
             TextField(
                 value = email,
                 onValueChange = { newValue ->
                     viewModel.onEmailChange(newValue)
                 },
-                placeholder = "Введите Email",
+                placeholder = {
+                    Text("Введите Email")
+                },
                 modifier = Modifier
                     .testTag(Tags.MainScreen.emailTextField)
                     .padding(bottom = 16.dp),
@@ -108,6 +115,7 @@ fun MainScreen(
                         .build(),
                     contentDescription = "Happy Cat",
                     modifier = Modifier
+                        .testTag("GifHappyCat")
                         .fillMaxWidth(0.9f)
                         .height(300.dp)
                         .padding(bottom = 16.dp),
@@ -118,7 +126,9 @@ fun MainScreen(
                     color = Color(0xFF4CAF50), // Green color
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    modifier = Modifier
+                        .testTag("SuccessText")
+                        .padding(bottom = 16.dp)
                 )
                 
             }
@@ -129,7 +139,9 @@ fun MainScreen(
                         text = message,
                         color = Color.Red,
                         fontSize = 30.sp,
-                        modifier = Modifier.padding(bottom = 16.dp)
+                        modifier = Modifier
+                            .testTag("ErrorText")
+                            .padding(bottom = 16.dp)
                     )
                 }
             }
@@ -143,7 +155,9 @@ fun MainScreen(
                 isEnabled = viewModel.isEmailValid() && !isLoading,
                 backgroundColor = Color(0xFF007AFF),
                 disabledBackgroundColor = Color.Gray,
-                modifier = Modifier.padding(bottom = 12.dp)
+                modifier = Modifier
+                    .testTag(Tags.MainScreen.checkButton)
+                    .padding(bottom = 12.dp)
             )
             
             // "В шок" button
