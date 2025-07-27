@@ -12,6 +12,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import ru.yavshok.app.Tags
 import ru.yavshok.app.utility.CredentialsData
+import ru.yavshok.app.utility.ApplicationTextEnv
 
 class MainScreenFixture(private val testRule: ComposeTestRule){
     private val title = testRule.onNodeWithTag(Tags.MainScreen.screenTitle)
@@ -24,28 +25,28 @@ class MainScreenFixture(private val testRule: ComposeTestRule){
     // Проверка заголовка экрана
     fun checkTitle(): MainScreenFixture {
         title.assertIsDisplayed()
-        title.assertTextEquals("Я в ШОКе")
+        title.assertTextEquals(ApplicationTextEnv.MainScreen.title)
         return this
     }
 
     // Проверка поля для ввода почты
     fun checkEmailTextField(): MainScreenFixture {
         emailTextField.assertIsDisplayed()
-        emailTextField.assertTextContains("Введите Email")
+        emailTextField.assertTextContains(ApplicationTextEnv.MainScreen.emailButton)
         return this
     }
 
     // Проверка кнопки "проверки пользователя"
     fun checkCheckButton(): MainScreenFixture {
         checkButton.assertIsDisplayed()
-        checkButton.assertTextContains("Я в шоке?")
+        checkButton.assertTextContains(ApplicationTextEnv.MainScreen.checkButton)
         return this
     }
 
     // Проверка кнопки "логина"
     fun checkLoginButton(): MainScreenFixture {
         loginButton.assertIsDisplayed()
-        checkButton.assertTextContains("В шок")
+        checkButton.assertTextContains(ApplicationTextEnv.MainScreen.loginButton)
         return this
     }
 
@@ -56,7 +57,7 @@ class MainScreenFixture(private val testRule: ComposeTestRule){
         emailTextField.performTextInput(CredentialsData.ValidUserData.email)
         checkButton.performClick()
         successMessage.assertIsDisplayed()
-        successMessage.assertTextEquals("Ты уже в ШОКе")
+        successMessage.assertTextEquals(ApplicationTextEnv.MainScreen.successMessage)
         failedMessage.assertIsNotDisplayed()
         return this
     }
@@ -68,7 +69,7 @@ class MainScreenFixture(private val testRule: ComposeTestRule){
         emailTextField.performTextInput(CredentialsData.ValidUserData.email)
         checkButton.performClick()
         successMessage.assertIsNotDisplayed()
-        failedMessage.assertTextEquals("Ты еще не в ШОКе")
+        failedMessage.assertTextEquals(ApplicationTextEnv.MainScreen.failedMessage)
         failedMessage.assertIsDisplayed()
         return this
     }

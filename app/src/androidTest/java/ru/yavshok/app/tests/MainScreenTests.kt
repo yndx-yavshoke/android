@@ -46,7 +46,9 @@ class MainScreenTests {
     fun shouldUserEmailExistInDatabase() {
         mainScreen.checkEmailTextField()
         mainScreen.enterEmailCredentials(CredentialsData.ValidUserData.email)
+        Thread.sleep(3_000L)
         mainScreen.clickCheckButton()
+        Thread.sleep(3_000L)
         mainScreen.checkSuccessMessage()
     }
 
@@ -55,8 +57,11 @@ class MainScreenTests {
     fun shouldUserEmailNotExistInDatabase() {
         mainScreen.checkEmailTextField()
         mainScreen.enterEmailCredentials(CredentialsData.IncorrectUserData.email)
+        Thread.sleep(3_000L)
         mainScreen.clickLoginButton()
+        Thread.sleep(3_000L)
         mainScreen.checkFailedMessage()
+        // ono flakaet ya shas vskrous' 8h bez pereriva
     }
 
 
