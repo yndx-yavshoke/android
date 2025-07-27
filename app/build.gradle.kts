@@ -91,6 +91,11 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/*.md"
+            excludes += "/META-INF/*.txt"
+            excludes += "/META-INF/notice*"
+            excludes += "/META-INF/license*"
+            excludes += "/META-INF/DEPENDENCIES"
         }
     }
 }
@@ -132,7 +137,8 @@ dependencies {
     // Coil for GIF loading
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("io.coil-kt:coil-gif:2.4.0")
-    
+//    implementation("com.google.android.ads:mediation-test-suite:3.0.0")
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -140,4 +146,17 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // Для тестов
+    testImplementation ("io.mockk:mockk:1.13.8")
+    androidTestImplementation ("io.mockk:mockk-android:1.13.8")
+
+    // Для тестов с реальным API
+    androidTestImplementation ("androidx.test:core:1.5.0")
+    androidTestImplementation ("androidx.test:runner:1.5.2")
+    androidTestImplementation ("androidx.test:rules:1.5.0")
+    androidTestImplementation ("androidx.test.ext:junit:1.1.5")
+
+    // Coroutines для асинхронных операций
+    androidTestImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 }

@@ -9,9 +9,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.yavshok.app.Tags
 
 @Composable
 fun Button(
@@ -26,7 +28,8 @@ fun Button(
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
-            .height(56.dp),
+            .height(56.dp)
+        ,
         enabled = isEnabled,
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(
