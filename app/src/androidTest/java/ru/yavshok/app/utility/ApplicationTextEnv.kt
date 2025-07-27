@@ -16,6 +16,5 @@ class ApplicationTextEnv {
         const val loginButton = "В шок"
         const val registrationButton = "Регистрация"
         const val backButton = "Назад"
-
     }
 }

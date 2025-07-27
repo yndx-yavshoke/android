@@ -39,6 +39,10 @@ enum class Screen {
 }
 
 class MainActivity : ComponentActivity() {
+
+    private val isTest by lazy {
+        intent?.getBooleanExtra("IS_TEST_MODE", false) ?: false
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
