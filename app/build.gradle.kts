@@ -1,3 +1,4 @@
+import org.gradle.kotlin.dsl.androidTestImplementation
 import java.util.Properties
 import java.io.FileInputStream
 
@@ -6,16 +7,18 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(FileInputStream(localPropertiesFile))
+}
+
+val email: String? = localProperties.getProperty("EMAIL")
+val password: String? = localProperties.getProperty("PASSWORD")
+
 android {
     namespace = "ru.yavshok.app"
-    compileSdk = 34
-
-    // Load properties from local.properties file
-    val localPropertiesFile = rootProject.file("local.properties")
-    val localProperties = Properties()
-    if (localPropertiesFile.exists()) {
-        localProperties.load(FileInputStream(localPropertiesFile))
-    }
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "ru.yavshok.app"
@@ -33,6 +36,8 @@ android {
         // Add build config fields
 
         buildConfigField("String", "BASE_URL", "\"${project.findProperty("API_BASE_URL")}\"")
+        buildConfigField("String", "EMAIL", "\"${localProperties.getProperty("EMAIL") ?: ""}\"")
+        buildConfigField("String", "PASSWORD", "\"${localProperties.getProperty("PASSWORD") ?: ""}\"")
     }
 
     signingConfigs {
@@ -140,4 +145,6 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    androidTestImplementation("androidx.test.uiautomator:uiautomator:2.2.0")
 }
