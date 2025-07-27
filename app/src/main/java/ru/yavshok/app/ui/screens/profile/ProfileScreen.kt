@@ -25,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -34,6 +35,7 @@ import coil.compose.AsyncImage
 import coil.decode.GifDecoder
 import coil.request.ImageRequest
 import ru.yavshok.app.R
+import ru.yavshok.app.Tags
 import ru.yavshok.app.viewmodel.ProfileUiState
 import ru.yavshok.app.viewmodel.ProfileViewModel
 
@@ -131,6 +133,7 @@ private fun ProfileHeader(
                     contentDescription = "Profile Image",
                     imageLoader = imageLoader,
                     modifier = Modifier
+                        .testTag(Tags.ProfileScreen.userAvatar)
                         .size(80.dp)
                         .clip(CircleShape),
                     contentScale = ContentScale.Crop
@@ -146,13 +149,15 @@ private fun ProfileHeader(
                         text = profile.name,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black
+                        color = Color.Black,
+                        modifier = Modifier.testTag(Tags.ProfileScreen.userName)
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = profile.subtitle,
                         fontSize = 16.sp,
-                        color = Color.Black
+                        color = Color.Black,
+                        modifier = Modifier.testTag(Tags.ProfileScreen.userStatus)
                     )
                 }
             }
@@ -166,14 +171,16 @@ private fun ProfileHeader(
              horizontalArrangement = Arrangement.SpaceBetween
          ) {
              Row(
-                 horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start)
+                 horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
+                 modifier = Modifier.testTag(Tags.ProfileScreen.statsRow) //позже перевесить по тегу на каждую пару из числа и подписи
              ) {
                  StatItem(count = profile.postsCount, label = "Постов")
                  StatItem(count = profile.followersCount, label = "Подписчиков")
                  StatItem(count = profile.likesCount, label = "Лайков")
              }
              IconButton(
-                 onClick = { 
+                 modifier = Modifier.testTag(Tags.ProfileScreen.logoutButton),
+                 onClick = {
                      onLogoutClick() 
                  },
              ) {
@@ -195,6 +202,7 @@ private fun ProfileHeader(
                 onEditProfileClick()
             },
             modifier = Modifier
+                .testTag(Tags.ProfileScreen.editNameButton)
                 .fillMaxWidth()
                 .height(35.dp),
             colors = ButtonDefaults.buttonColors(
@@ -241,7 +249,9 @@ private fun PhotoGrid(photos: List<String>) {
         columns = GridCells.Fixed(3),
         horizontalArrangement = Arrangement.spacedBy(2.dp),
         verticalArrangement = Arrangement.spacedBy(2.dp),
-        modifier = Modifier.height(400.dp) // Fixed height for the grid
+        modifier = Modifier
+            .height(400.dp) // Fixed height for the grid
+            .testTag(Tags.ProfileScreen.photoArea)
     ) {
         items(photos) { photo ->
             val drawableRes = when (photo) {
