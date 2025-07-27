@@ -110,7 +110,8 @@ fun MainScreen(
                     modifier = Modifier
                         .fillMaxWidth(0.9f)
                         .height(300.dp)
-                        .padding(bottom = 16.dp),
+                        .padding(bottom = 16.dp)
+                        .testTag(Tags.MainScreen.userExistImage),
                     contentScale = ContentScale.Crop
                 )
                 Text(
@@ -119,6 +120,7 @@ fun MainScreen(
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(bottom = 16.dp)
+                        .testTag(Tags.MainScreen.userExistLabel)
                 )
                 
             }
@@ -130,6 +132,7 @@ fun MainScreen(
                         color = Color.Red,
                         fontSize = 30.sp,
                         modifier = Modifier.padding(bottom = 16.dp)
+                            .testTag(Tags.MainScreen.nonExistUser)
                     )
                 }
             }
@@ -144,6 +147,7 @@ fun MainScreen(
                 backgroundColor = Color(0xFF007AFF),
                 disabledBackgroundColor = Color.Gray,
                 modifier = Modifier.padding(bottom = 12.dp)
+                    .testTag(Tags.MainScreen.yavshokeButton)
             )
             
             // "В шок" button
