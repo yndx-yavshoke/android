@@ -6,4 +6,6 @@ class index (composeTestRule: AndroidComposeTestRule<*, *>) {
     val mainScreen = MainScreenFixture(composeTestRule)
     val loginScreen = LoginScreenFixture(composeTestRule)
     val profileScreen = ProfileScreenFixture(composeTestRule)
+    val registerScreen = RegisterScreenFixture(composeTestRule)
+    val editProfileScreen = EditProfileScreenFixture(composeTestRule)
 }

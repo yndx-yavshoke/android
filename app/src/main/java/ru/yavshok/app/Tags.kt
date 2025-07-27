@@ -42,4 +42,13 @@ object Tags {
         const val photoGrid = "profile_screen.photo_grid"
         const val statisticGrid = "profile_screen.statistic_grid"
     }
+
+    object EditProfileScreen {
+        const val screenTitle = "edit_profile_screen.screen_title"
+        const val nameTextField = "edit_profile_screen.name_text_field"
+        const val saveButton = "edit_profile_screen.save_button"
+        const val cancelButton = "edit_profile_screen.cancel_button"
+        const val errorMessage = "edit_profile_screen.error_message"
+        const val loadingIndicator = "edit_profile_screen.loading_indicator"
+    }
 }
