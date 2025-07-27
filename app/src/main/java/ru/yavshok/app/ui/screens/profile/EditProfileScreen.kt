@@ -15,6 +15,8 @@ import androidx.compose.ui.unit.sp
 import ru.yavshok.app.ui.components.TextField
 import ru.yavshok.app.ui.components.Button
 import ru.yavshok.app.viewmodel.EditProfileViewModel
+import androidx.compose.ui.platform.testTag
+import ru.yavshok.app.Tags
 
 
 @Composable
@@ -59,7 +61,8 @@ fun EditProfileScreen(
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            modifier = Modifier.testTag(Tags.EditScreen.title)
         )
         
         Spacer(modifier = Modifier.height(48.dp))
@@ -72,7 +75,8 @@ fun EditProfileScreen(
             color = Color.Black,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 8.dp),
+                .padding(bottom = 8.dp)
+                .testTag(Tags.EditScreen.nameLine),
             textAlign = TextAlign.Start
         )
         
@@ -97,6 +101,7 @@ fun EditProfileScreen(
                 fontSize = 16.sp,
                 textAlign = TextAlign.Start,
                 modifier = Modifier.fillMaxWidth()
+                    .testTag(Tags.EditScreen.buttonSaveChanges)
             )
         }
         
@@ -108,7 +113,8 @@ fun EditProfileScreen(
             onClick = {
                 viewModel.updateProfile()
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
+                .testTag(Tags.EditScreen.buttonSaveChanges),
             isEnabled = !uiState.isLoading && uiState.name.isNotBlank(),
             backgroundColor = Color(0xFF007AFF)
         )
@@ -121,7 +127,8 @@ fun EditProfileScreen(
             onClick = {
                 onNavigateBack()
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
+                .testTag(Tags.EditScreen.buttonCancel),
             isEnabled = !uiState.isLoading,
             backgroundColor = Color(0xFF6C757D)
         )

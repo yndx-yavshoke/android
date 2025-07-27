@@ -12,6 +12,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.yavshok.app.Tags
+import androidx.compose.ui.platform.testTag
 
 @Composable
 fun Button(
@@ -25,6 +27,7 @@ fun Button(
     Button(
         onClick = onClick,
         modifier = modifier
+            .testTag(Tags.LoginScreen.screnRegisterButton)
             .fillMaxWidth()
             .height(56.dp),
         enabled = isEnabled,

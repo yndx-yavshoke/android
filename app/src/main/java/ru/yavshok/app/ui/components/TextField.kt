@@ -12,6 +12,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.testTag
+import ru.yavshok.app.Tags
 
 @Composable
 fun TextField(
@@ -26,7 +28,8 @@ fun TextField(
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth()
+            .testTag(Tags.EditScreen.nameTextField),
         placeholder = {
             Text(
                 text = placeholder,
