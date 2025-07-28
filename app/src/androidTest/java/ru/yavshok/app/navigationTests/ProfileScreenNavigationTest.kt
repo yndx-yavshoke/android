@@ -12,66 +12,34 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import ru.yavshok.app.MainActivity
 import ru.yavshok.app.UserData
+import ru.yavshok.app.pages.EditProfileScreenPage
 import ru.yavshok.app.pages.LoginScreenPage
 import ru.yavshok.app.pages.MainScreenPage
 import ru.yavshok.app.pages.ProfileScreenPage
-import ru.yavshok.app.pages.RegisterScreenPage
 
 
 @RunWith(AndroidJUnit4::class)
-class LoginScreenNavigationTest {
+class ProfileScreenNavigationTest {
 
     @get: Rule
     val composeRuleActivity = createAndroidComposeRule<MainActivity>()
 
-    private lateinit var mainScreen: MainScreenPage
-    private lateinit var loginScreen: LoginScreenPage
-    private lateinit var registerScreen: RegisterScreenPage
     private lateinit var profileScreen: ProfileScreenPage
+    private lateinit var loginScreen: LoginScreenPage
+    private lateinit var mainScreen: MainScreenPage
+    private lateinit var editProfileScreen: EditProfileScreenPage
 
     @Before
     fun setup() {
         loginScreen = LoginScreenPage(composeRuleActivity)
         mainScreen = MainScreenPage(composeRuleActivity)
-        registerScreen = RegisterScreenPage(composeRuleActivity)
         profileScreen = ProfileScreenPage(composeRuleActivity)
-    }
-
-    @Test
-    fun navigateFromLoginToMain() {
-        mainScreen.waitForTitle()
-        mainScreen.title.assertIsDisplayed()
-        mainScreen.goToLoginButton.performClick()
-
-        loginScreen.waitForTitle()
-        loginScreen.title.assertIsDisplayed()
-        mainScreen.title.assertDoesNotExist()
-
-        loginScreen.clickBackButton()
-        mainScreen.title.assertIsDisplayed()
-        loginScreen.title.assertDoesNotExist()
-    }
-
-    @Test
-    fun navigateFromLoginToRegister() {
-        mainScreen.waitForTitle()
-        mainScreen.title.assertIsDisplayed()
-        mainScreen.goToLoginButton.performClick()
-
-        loginScreen.waitForTitle()
-        loginScreen.title.assertIsDisplayed()
-        mainScreen.title.assertDoesNotExist()
-
-
-        loginScreen.clickGoToRegisterButton()
-        registerScreen.waitForTitle()
-        registerScreen.title.assertIsDisplayed()
-        loginScreen.title.assertDoesNotExist()
+        editProfileScreen = EditProfileScreenPage(composeRuleActivity)
     }
 
     @OptIn(ExperimentalTestApi::class)
     @Test
-    fun navigateFromLoginToProfile() {
+    fun navigateFromProfileToEditProfileScreen() {
         mainScreen.waitForTitle()
         mainScreen.title.assertIsDisplayed()
         mainScreen.goToLoginButton.performClick()
@@ -88,5 +56,32 @@ class LoginScreenNavigationTest {
         )
         profileScreen.logoutButton.assertIsDisplayed()
         loginScreen.title.assertDoesNotExist()
+
+        profileScreen.clickEditButton()
+        editProfileScreen.title.assertIsDisplayed()
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun navigateFromProfileToMainScreen() {
+        mainScreen.waitForTitle()
+        mainScreen.title.assertIsDisplayed()
+        mainScreen.goToLoginButton.performClick()
+
+        loginScreen.waitForTitle()
+        loginScreen.title.assertIsDisplayed()
+        mainScreen.title.assertDoesNotExist()
+
+
+        loginScreen.fullLogin(UserData.TEST_EMAIL, UserData.TEST_PASSWORD)
+        composeRuleActivity.waitUntilAtLeastOneExists(
+            timeoutMillis = 10_000L,
+            matcher = hasTestTag("profile_screen.profile_logout_button")
+        )
+        profileScreen.logoutButton.assertIsDisplayed()
+        loginScreen.title.assertDoesNotExist()
+
+        profileScreen.clickLogoutButton()
+        mainScreen.title.assertIsDisplayed()
     }
 }

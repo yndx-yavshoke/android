@@ -19,6 +19,7 @@ import ru.yavshok.app.ui.screens.login.LoginScreen
 import ru.yavshok.app.viewmodel.ViewModelFactory
 import kotlin.concurrent.thread
 import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.onAllNodesWithTag
 
 
 @RunWith(AndroidJUnit4::class)
@@ -79,4 +80,6 @@ class LoginScreenTest {
         )
         loginScreen.incorrectPasswordOrEmailError()
     }
+
+
 }

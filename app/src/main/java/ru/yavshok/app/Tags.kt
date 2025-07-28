@@ -31,4 +31,19 @@ object Tags {
         const val registerButton = "register_screen.register_button"
         const val backButton = "register_screen.back_button"
     }
+
+    object ProfileScreen {
+        const val profileImage = "profile_screen.profile_image"
+        const val profileUserName = "profile_screen.profile_user_name"
+        const val profileAgeStatus = "profile_screen.profile_age_status"
+        const val logoutButton = "profile_screen.profile_logout_button"
+        const val editButton = "profile_screen.profile_edit_button"
+    }
+
+    object EditProfileScreen {
+        const val title = "edit_profile_screen.screen_title"
+        const val nameEditInput = "edit_profile_screen.name_edit_input"
+        const val saveChangesButton = "edit_profile_screen.save_changes_button"
+        const val cancelButton = "edit_profile_screen.cancel_button"
+    }
 }
