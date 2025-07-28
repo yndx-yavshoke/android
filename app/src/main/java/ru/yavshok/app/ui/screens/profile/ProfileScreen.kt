@@ -25,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -34,6 +35,7 @@ import coil.compose.AsyncImage
 import coil.decode.GifDecoder
 import coil.request.ImageRequest
 import ru.yavshok.app.R
+import ru.yavshok.app.Tags
 import ru.yavshok.app.viewmodel.ProfileUiState
 import ru.yavshok.app.viewmodel.ProfileViewModel
 
@@ -144,6 +146,7 @@ private fun ProfileHeader(
                 ) {
                     Text(
                         text = profile.name,
+                        modifier = Modifier.testTag(Tags.ProfileScreen.nameField),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
@@ -151,6 +154,7 @@ private fun ProfileHeader(
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = profile.subtitle,
+                        modifier = Modifier.testTag(Tags.ProfileScreen.statusField),
                         fontSize = 16.sp,
                         color = Color.Black
                     )
@@ -176,12 +180,15 @@ private fun ProfileHeader(
                  onClick = { 
                      onLogoutClick() 
                  },
+                 modifier = Modifier.testTag(Tags.ProfileScreen.logoutButton)
              ) {
                  Icon(
                      Logout,
                      contentDescription = "Logout",
                      tint = Color.Black,
-                     modifier = Modifier.size(24.dp)
+                     modifier = Modifier
+
+                         .size(24.dp)
                  )
              }
          }
@@ -195,6 +202,7 @@ private fun ProfileHeader(
                 onEditProfileClick()
             },
             modifier = Modifier
+                .testTag(Tags.ProfileScreen.renameButton)
                 .fillMaxWidth()
                 .height(35.dp),
             colors = ButtonDefaults.buttonColors(
