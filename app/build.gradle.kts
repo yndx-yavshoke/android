@@ -6,6 +6,10 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
+dependencies {
+    implementation("com.github.javafaker:javafaker:1.0.2")
+    androidTestImplementation("androidx.test.uiautomator:uiautomator:2.2.0")
+}
 android {
     namespace = "ru.yavshok.app"
     compileSdk = 34
