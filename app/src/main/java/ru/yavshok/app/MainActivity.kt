@@ -52,30 +52,30 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val tokenStorage = remember { TokenStorage(this@MainActivity) }
                     val viewModelFactory = remember { ViewModelFactory(this@MainActivity) }
-                    
+
                     // Simple navigation state with logging
-                    var currentScreen by remember { 
+                    var currentScreen by remember {
                         mutableStateOf(Screen.SPLASH).also {
                             Log.d("MainActivity", "🟢 Initial currentScreen set to: SPLASH")
                         }
                     }
-                    var isLoggedIn by remember { 
+                    var isLoggedIn by remember {
                         mutableStateOf(tokenStorage.isLoggedIn()).also {
                             Log.d("MainActivity", "🟢 Initial isLoggedIn set to: ${tokenStorage.isLoggedIn()}")
                         }
                     }
 
 
-                    
+
                     // Log state changes
                     LaunchedEffect(currentScreen) {
                         Log.d("MainActivity", "🔄 Navigation changed to: ${currentScreen.name}")
                     }
-                    
+
                     LaunchedEffect(isLoggedIn) {
                         Log.d("MainActivity", "🔄 Login state changed to: $isLoggedIn")
                     }
-                    
+
                     // Note: Initial navigation now handled by SplashScreen
 
                     when (currentScreen) {

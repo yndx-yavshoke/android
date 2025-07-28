@@ -41,21 +41,21 @@ fun LoginScreen(
     viewModel: LoginViewModel
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    
+
     // Reset login state when screen is disposed (removed from navigation stack)
     DisposableEffect(Unit) {
         onDispose {
             viewModel.resetLoginState()
         }
     }
-    
+
     // Handle login success
     LaunchedEffect(uiState.isLoginSuccessful) {
         if (uiState.isLoginSuccessful) {
             onLoginSuccess()
         }
     }
-    
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -65,7 +65,7 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(80.dp))
-        
+
         // Title
         Text(
             text = "Войти в ШОК",
@@ -75,9 +75,9 @@ fun LoginScreen(
             textAlign = TextAlign.Center,
             modifier = Modifier.testTag(Tags.LoginScreen.screenTitle)
         )
-        
+
         Spacer(modifier = Modifier.height(48.dp))
-        
+
         // Email field
         TextField(
             value = uiState.email,
@@ -85,12 +85,14 @@ fun LoginScreen(
                 viewModel.updateEmail(newValue)
             },
             placeholder = "Email",
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .testTag(Tags.LoginScreen.emailTextField)
+                .fillMaxWidth(),
             isError = uiState.errorMessage != null
         )
-        
+
         Spacer(modifier = Modifier.height(16.dp))
-        
+
         // Password field
         TextField(
             value = uiState.password,
@@ -98,13 +100,15 @@ fun LoginScreen(
                 viewModel.updatePassword(newValue)
             },
             placeholder = "Пароль",
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .testTag(Tags.LoginScreen.passwordTextField)
+                .fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
             isError = uiState.errorMessage != null
         )
-        
+
         Spacer(modifier = Modifier.height(16.dp))
-        
+
         // Error message
         uiState.errorMessage?.let { errorMessage ->
             Text(
@@ -112,12 +116,14 @@ fun LoginScreen(
                 color = Color.Red,
                 fontSize = 16.sp,
                 textAlign = TextAlign.Start,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .testTag(Tags.LoginScreen.errorText)
+                    .fillMaxWidth()
             )
         }
-        
+
         Spacer(modifier = Modifier.height(24.dp))
-        
+
         // Login and Back buttons row
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -126,41 +132,47 @@ fun LoginScreen(
             // Login button
             Button(
                 text = if (uiState.isLoading) "Вход..." else "В шок",
-                            onClick = {
-                viewModel.login()
-            },
-                modifier = Modifier.weight(1f),
+                onClick = {
+                    viewModel.login()
+                },
+                modifier = Modifier
+                    .testTag(Tags.LoginScreen.loginButton)
+                    .weight(1f),
                 isEnabled = !uiState.isLoading,
                 backgroundColor = Color(0xFF007AFF)
             )
-            
+
             // Back button
             Button(
-                        text = "Назад",
-        onClick = {
-            onNavigateBack()
-        },
-                modifier = Modifier.weight(1f),
+                text = "Назад",
+                onClick = {
+                    onNavigateBack()
+                },
+                modifier = Modifier
+                    .testTag(Tags.LoginScreen.backButton)
+                    .weight(1f),
                 isEnabled = !uiState.isLoading,
                 backgroundColor = Color(0xFF6C757D)
             )
         }
-        
+
         Spacer(modifier = Modifier.height(12.dp))
-        
+
         // Registration button
         Button(
             text = "Регистрация",
             onClick = {
                 onNavigateToRegister()
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .testTag(Tags.LoginScreen.registerButton)
+                .fillMaxWidth(),
             isEnabled = !uiState.isLoading,
             backgroundColor = Color(0xFF007AFF)
         )
-        
+
         Spacer(modifier = Modifier.height(24.dp))
-        
+
         // Loading indicator
         if (uiState.isLoading) {
             CircularProgressIndicator(
