@@ -25,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -34,6 +35,7 @@ import coil.compose.AsyncImage
 import coil.decode.GifDecoder
 import coil.request.ImageRequest
 import ru.yavshok.app.R
+import ru.yavshok.app.Tags
 import ru.yavshok.app.viewmodel.ProfileUiState
 import ru.yavshok.app.viewmodel.ProfileViewModel
 
@@ -124,17 +126,17 @@ private fun ProfileHeader(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // Profile image
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(R.drawable.profile)
-                        .build(),
-                    contentDescription = "Profile Image",
-                    imageLoader = imageLoader,
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clip(CircleShape),
-                    contentScale = ContentScale.Crop
-                )
+//                AsyncImage(
+//                    model = ImageRequest.Builder(LocalContext.current)
+//                        .data(R.drawable.profile)
+//                        .build(),
+//                    contentDescription = "Profile Image",
+//                    imageLoader = imageLoader,
+//                    modifier = Modifier
+//                        .size(80.dp)
+//                        .clip(CircleShape),
+//                    contentScale = ContentScale.Crop
+//                )
                 
                 Spacer(modifier = Modifier.width(20.dp))
                 
@@ -196,7 +198,8 @@ private fun ProfileHeader(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(35.dp),
+                .height(35.dp)
+                .testTag(Tags.ProfileScreen.editProfileButton),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Transparent,
                 contentColor = Color.Black
