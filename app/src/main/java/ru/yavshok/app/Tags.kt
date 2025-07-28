@@ -12,4 +12,9 @@ object Tags {
         const val screenContainer = "login_screen.container"
         const val screenTitle = "login_screen.screen_title"
     }
+    object RegisterScreen {
+    const val screenContainer = "register_screen_container"
+    const val screenTitle = "register_screen_title"
+   
+    }
 }
