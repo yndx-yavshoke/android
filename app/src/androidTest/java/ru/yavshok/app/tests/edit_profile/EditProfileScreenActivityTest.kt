@@ -1,25 +1,22 @@
 package ru.yavshok.app.tests.edit_profile
 
+import android.content.Context
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.javafaker.Faker
 import org.junit.After
 import org.junit.Before
-import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import ru.yavshok.app.MainActivity
 import ru.yavshok.app.ValidUser
+import ru.yavshok.app.data.storage.TokenStorage
 import ru.yavshok.app.pages.EditProfilePage
 import ru.yavshok.app.pages.LoginPage
 import ru.yavshok.app.pages.MainPage
 import ru.yavshok.app.pages.ProfilePage
-import ru.yavshok.app.ui.screens.register.RegisterScreen
-import ru.yavshok.app.viewmodel.ViewModelFactory
 
 
 @RunWith(AndroidJUnit4::class)
@@ -56,6 +53,12 @@ class EditProfileScreenActivityTest {
         with(editProfilePage){
             allElementsIsDisplayed()
         }
+    }
+
+    @After
+    fun logout(){
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        TokenStorage(context).logout()
     }
 
     @Test

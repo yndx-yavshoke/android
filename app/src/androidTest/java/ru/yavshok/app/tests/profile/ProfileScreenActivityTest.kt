@@ -1,12 +1,16 @@
 package ru.yavshok.app.tests.profile
 
+import android.content.Context
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import ru.yavshok.app.MainActivity
+import ru.yavshok.app.data.storage.TokenStorage
 import ru.yavshok.app.pages.EditProfilePage
 import ru.yavshok.app.pages.LoginPage
 import ru.yavshok.app.pages.MainPage
@@ -42,6 +46,12 @@ class ProfileScreenActivityTest {
         with(profilePage){
             allElementsIsDisplayed()
         }
+    }
+
+    @After
+    fun logout(){
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        TokenStorage(context).logout()
     }
 
     @Test
