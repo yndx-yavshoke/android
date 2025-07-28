@@ -58,4 +58,50 @@ fun SplashScreen(
             }
         }
     }
-} 
+}
+
+@Composable
+fun SplashScreen(
+    viewModel: SplashViewModel,
+    onNavigate: (isLoggedIn: Boolean) -> Unit
+) {
+    val uiState by viewModel.uiState.collectAsState()
+
+    // Handle navigation
+    LaunchedEffect(uiState.shouldNavigate) {
+        if (uiState.shouldNavigate) {
+            onNavigate(uiState.isLoggedIn)
+            viewModel.resetNavigation()
+        }
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            // Main title
+            Text(
+                text = "Я в ШОКе",
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black,
+                textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(bottom = 48.dp)
+            )
+
+
+            if (uiState.isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(32.dp),
+                    color = Color(0xFF007AFF)
+                )
+            }
+        }
+    }
+}

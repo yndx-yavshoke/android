@@ -17,16 +17,16 @@ import ru.yavshok.app.data.model.ExperimentResponse
 interface ApiService {
     @POST("/exist")
     suspend fun checkEmailExists(@Body request: ExistRequest): Response<ExistResponse>
-    
+
     @POST("/auth/login")
     suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
-    
+
     @POST("/auth/register")
     suspend fun register(@Body request: RegisterRequest): Response<RegisterResponse>
-    
+
     @GET("/user/me")
     suspend fun getCurrentUser(@Header("Authorization") token: String): Response<UserResponse>
-    
+
     @GET("/experiments")
     suspend fun getExperiments(): Response<ExperimentResponse>
 }

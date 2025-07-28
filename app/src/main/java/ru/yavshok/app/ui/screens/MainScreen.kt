@@ -1,5 +1,4 @@
 package ru.yavshok.app.ui.screens
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,8 +35,6 @@ import ru.yavshok.app.ui.components.CustomButton
 import ru.yavshok.app.ui.components.TextField
 import ru.yavshok.app.viewmodel.MainViewModel
 import java.util.concurrent.TimeUnit
-
-
 @Composable
 fun MainScreen(
     onNavigateToLogin: () -> Unit,
@@ -48,9 +45,8 @@ fun MainScreen(
     val errorMessage by viewModel.errorMessage
     val isEmailExists by viewModel.isEmailExists
     val showConfetti by viewModel.showConfetti
-
     val context = LocalContext.current
-    
+
     // Create confetti party configuration
     val party = remember {
         Party(
@@ -63,7 +59,7 @@ fun MainScreen(
             emitter = Emitter(duration = 3, TimeUnit.SECONDS).max(100)
         )
     }
-    
+
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -85,7 +81,7 @@ fun MainScreen(
                     .padding(bottom = 48.dp)
                     .testTag(Tags.MainScreen.screenTitle)
             )
-            
+
             // Email input
             TextField(
                 value = email,
@@ -98,7 +94,7 @@ fun MainScreen(
                     .padding(bottom = 16.dp),
                 isError = errorMessage != null && !isEmailExists
             )
-            
+
             // Success message and GIF when email exists
             if (isEmailExists) {
                 AsyncImage(
@@ -108,6 +104,7 @@ fun MainScreen(
                         .build(),
                     contentDescription = "Happy Cat",
                     modifier = Modifier
+                        .testTag(Tags.MainScreen.catGif)
                         .fillMaxWidth(0.9f)
                         .height(300.dp)
                         .padding(bottom = 16.dp),
@@ -118,34 +115,40 @@ fun MainScreen(
                     color = Color(0xFF4CAF50), // Green color
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    modifier = Modifier
+                        .testTag(Tags.MainScreen.emailExist)
+                        .padding(bottom = 16.dp)
                 )
-                
+
             }
-            
+
             if (!isEmailExists) {
                 errorMessage?.let { message ->
                     Text(
                         text = message,
                         color = Color.Red,
                         fontSize = 30.sp,
-                        modifier = Modifier.padding(bottom = 16.dp)
+                        modifier = Modifier
+                            .testTag(Tags.MainScreen.emailNotExist)
+                            .padding(bottom = 16.dp)
                     )
                 }
             }
-            
+
             // "Я в шоке?" button
             CustomButton(
                 text = if (isLoading) "Проверяем..." else "Я в шоке?",
-                onClick = { 
-                    viewModel.checkEmailExists() 
+                onClick = {
+                    viewModel.checkEmailExists()
                 },
                 isEnabled = viewModel.isEmailValid() && !isLoading,
                 backgroundColor = Color(0xFF007AFF),
                 disabledBackgroundColor = Color.Gray,
-                modifier = Modifier.padding(bottom = 12.dp)
+                modifier = Modifier
+                    .testTag(Tags.MainScreen.checkButton)
+                    .padding(bottom = 12.dp)
             )
-            
+
             // "В шок" button
             CustomButton(
                 text = "В шок",
@@ -155,10 +158,155 @@ fun MainScreen(
                 backgroundColor = Color(0xFF007AFF),
                 modifier = Modifier.testTag(Tags.MainScreen.loginButton)
             )
-            
+
             Spacer(modifier = Modifier.height(200.dp))
         }
-        
+
+        // Confetti animation overlay
+        if (showConfetti) {
+            KonfettiView(
+                modifier = Modifier.fillMaxSize(),
+                parties = listOf(party),
+                updateListener = object : OnParticleSystemUpdateListener {
+                    override fun onParticleSystemEnded(system: nl.dionsegijn.konfetti.core.PartySystem, activeSystems: Int) {
+                        if (activeSystems == 0) {
+                            viewModel.hideConfetti()
+                        }
+                    }
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun MainScreen(
+    onNavigateToLogin: () -> Unit,
+    viewModel: MainViewModel
+) {
+    val email by viewModel.email
+    val isLoading by viewModel.isLoading
+    val errorMessage by viewModel.errorMessage
+    val isEmailExists by viewModel.isEmailExists
+    val showConfetti by viewModel.showConfetti
+
+    val context = LocalContext.current
+
+    // Create confetti party configuration
+    val party = remember {
+        Party(
+            speed = 0f,
+            maxSpeed = 30f,
+            damping = 0.9f,
+            spread = 360,
+            colors = listOf(0xfce18a, 0xff726d, 0xf4306d, 0xb48def),
+            position = Position.Relative(0.5, 0.0),
+            emitter = Emitter(duration = 3, TimeUnit.SECONDS).max(100)
+        )
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .testTag(Tags.MainScreen.screenContainer)
+                .background(Color.White)
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            // Title
+            Text(
+                text = "Я в ШОКе",
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(bottom = 48.dp)
+                    .testTag(Tags.MainScreen.screenTitle)
+            )
+
+            // Email input
+            TextField(
+                value = email,
+                onValueChange = { newValue ->
+                    viewModel.onEmailChange(newValue)
+                },
+                placeholder = "Введите Email",
+                modifier = Modifier
+                    .testTag(Tags.MainScreen.emailTextField)
+                    .padding(bottom = 16.dp),
+                isError = errorMessage != null && !isEmailExists
+            )
+
+            // Success message and GIF when email exists
+            if (isEmailExists) {
+                AsyncImage(
+                    model = ImageRequest.Builder(context)
+                        .data(R.drawable.happy_cat)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = "Happy Cat",
+                    modifier = Modifier
+                        .testTag(Tags.MainScreen.imageCheckEmailTru)
+                        .fillMaxWidth(0.9f)
+                        .height(300.dp)
+                        .padding(bottom = 16.dp),
+                    contentScale = ContentScale.Crop
+                )
+                Text(
+                    text = "Ты уже в ШОКе",
+                    color = Color(0xFF4CAF50), // Green color
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .testTag(Tags.MainScreen.lineCheckEmailTrue)
+                        .padding(bottom = 16.dp)
+                )
+
+            }
+
+            if (!isEmailExists) {
+                errorMessage?.let { message ->
+                    Text(
+                        text = message,
+                        color = Color.Red,
+                        fontSize = 30.sp,
+                        modifier = Modifier
+                            .testTag(Tags.MainScreen.lineCheckEmailFalse)
+                            .padding(bottom = 16.dp)
+                    )
+                }
+            }
+
+            // "Я в шоке?" button
+            CustomButton(
+                text = if (isLoading) "Проверяем..." else "Я в шоке?",
+                onClick = {
+                    viewModel.checkEmailExists()
+                },
+                isEnabled = viewModel.isEmailValid() && !isLoading,
+                backgroundColor = Color(0xFF007AFF),
+                disabledBackgroundColor = Color.Gray,
+                modifier = Modifier
+                    .testTag(Tags.MainScreen.checkLoginButton)
+                    .padding(bottom = 12.dp)
+            )
+
+            // "В шок" button
+            CustomButton(
+                text = "В шок",
+                onClick = {
+                    onNavigateToLogin()
+                },
+                backgroundColor = Color(0xFF007AFF),
+                modifier = Modifier.testTag(Tags.MainScreen.loginButton)
+            )
+
+            Spacer(modifier = Modifier.height(200.dp))
+        }
+
         // Confetti animation overlay
         if (showConfetti) {
             KonfettiView(
