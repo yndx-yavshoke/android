@@ -25,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -34,6 +35,7 @@ import coil.compose.AsyncImage
 import coil.decode.GifDecoder
 import coil.request.ImageRequest
 import ru.yavshok.app.R
+import ru.yavshok.app.Tags
 import ru.yavshok.app.viewmodel.ProfileUiState
 import ru.yavshok.app.viewmodel.ProfileViewModel
 
@@ -47,19 +49,19 @@ fun ProfileScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
-    
+
     // Reactive refresh - update profile when screen is displayed
     LaunchedEffect(Unit) {
         viewModel.refreshProfile()
     }
-    
+
     // Create ImageLoader for GIF support
     val imageLoader = ImageLoader.Builder(context)
         .components {
             add(GifDecoder.Factory())
         }
         .build()
-    
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -85,12 +87,12 @@ fun ProfileScreen(
                         onLogout()
                     }
                 )
-                
+
                 // Photo grid
                 PhotoGrid(photos = profile.photos)
             }
         }
-        
+
         uiState.errorMessage?.let { error ->
             Text(
                 text = error,
@@ -135,15 +137,16 @@ private fun ProfileHeader(
                         .clip(CircleShape),
                     contentScale = ContentScale.Crop
                 )
-                
+
                 Spacer(modifier = Modifier.width(20.dp))
-                
+
                 // Name and subtitle
                 Column(
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
                         text = profile.name,
+                        modifier = Modifier.testTag(Tags.ProfileScreen.nameField),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
@@ -151,50 +154,55 @@ private fun ProfileHeader(
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = profile.subtitle,
+                        modifier = Modifier.testTag(Tags.ProfileScreen.statusField),
                         fontSize = 16.sp,
                         color = Color.Black
                     )
                 }
             }
         }
-        
-        Spacer(modifier = Modifier.height(32.dp))
-        
-                 Row(
-             modifier = Modifier.fillMaxWidth(),
-             verticalAlignment = Alignment.CenterVertically,
-             horizontalArrangement = Arrangement.SpaceBetween
-         ) {
-             Row(
-                 horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start)
-             ) {
-                 StatItem(count = profile.postsCount, label = "Постов")
-                 StatItem(count = profile.followersCount, label = "Подписчиков")
-                 StatItem(count = profile.likesCount, label = "Лайков")
-             }
-             IconButton(
-                 onClick = { 
-                     onLogoutClick() 
-                 },
-             ) {
-                 Icon(
-                     Logout,
-                     contentDescription = "Logout",
-                     tint = Color.Black,
-                     modifier = Modifier.size(24.dp)
-                 )
-             }
-         }
 
-        
+        Spacer(modifier = Modifier.height(32.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start)
+            ) {
+                StatItem(count = profile.postsCount, label = "Постов")
+                StatItem(count = profile.followersCount, label = "Подписчиков")
+                StatItem(count = profile.likesCount, label = "Лайков")
+            }
+            IconButton(
+                onClick = {
+                    onLogoutClick()
+                },
+                modifier = Modifier.testTag(Tags.ProfileScreen.logoutButton)
+            ) {
+                Icon(
+                    Logout,
+                    contentDescription = "Logout",
+                    tint = Color.Black,
+                    modifier = Modifier
+
+                        .size(24.dp)
+                )
+            }
+        }
+
+
         Spacer(modifier = Modifier.height(24.dp))
-        
+
         // Edit Profile button
         Button(
             onClick = {
                 onEditProfileClick()
             },
             modifier = Modifier
+                .testTag(Tags.ProfileScreen.renameButton)
                 .fillMaxWidth()
                 .height(35.dp),
             colors = ButtonDefaults.buttonColors(
@@ -251,7 +259,7 @@ private fun PhotoGrid(photos: List<String>) {
                 "4" -> R.drawable.photo_4
                 else -> R.drawable.photo_1
             }
-            
+
             Image(
                 painter = painterResource(id = drawableRes),
                 contentDescription = "Photo $photo",

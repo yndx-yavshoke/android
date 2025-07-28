@@ -50,7 +50,7 @@ fun MainScreen(
     val showConfetti by viewModel.showConfetti
 
     val context = LocalContext.current
-    
+
     // Create confetti party configuration
     val party = remember {
         Party(
@@ -63,7 +63,7 @@ fun MainScreen(
             emitter = Emitter(duration = 3, TimeUnit.SECONDS).max(100)
         )
     }
-    
+
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -85,7 +85,7 @@ fun MainScreen(
                     .padding(bottom = 48.dp)
                     .testTag(Tags.MainScreen.screenTitle)
             )
-            
+
             // Email input
             TextField(
                 value = email,
@@ -98,7 +98,7 @@ fun MainScreen(
                     .padding(bottom = 16.dp),
                 isError = errorMessage != null && !isEmailExists
             )
-            
+
             // Success message and GIF when email exists
             if (isEmailExists) {
                 AsyncImage(
@@ -118,34 +118,41 @@ fun MainScreen(
                     color = Color(0xFF4CAF50), // Green color
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    modifier = Modifier
+                        .testTag(Tags.MainScreen.existText)
+                        .padding(bottom = 16.dp)
                 )
-                
+
             }
-            
+
             if (!isEmailExists) {
                 errorMessage?.let { message ->
                     Text(
                         text = message,
                         color = Color.Red,
                         fontSize = 30.sp,
-                        modifier = Modifier.padding(bottom = 16.dp)
+                        modifier = Modifier
+                            .testTag(Tags.MainScreen.notExistText)
+                            .padding(bottom = 16.dp)
                     )
                 }
             }
-            
+
             // "Я в шоке?" button
             CustomButton(
                 text = if (isLoading) "Проверяем..." else "Я в шоке?",
-                onClick = { 
-                    viewModel.checkEmailExists() 
+                onClick = {
+                    viewModel.checkEmailExists()
                 },
                 isEnabled = viewModel.isEmailValid() && !isLoading,
                 backgroundColor = Color(0xFF007AFF),
                 disabledBackgroundColor = Color.Gray,
-                modifier = Modifier.padding(bottom = 12.dp)
+                modifier = Modifier
+                    .testTag(Tags.MainScreen.checkButton)
+                    .padding(bottom = 12.dp)
+
             )
-            
+
             // "В шок" button
             CustomButton(
                 text = "В шок",
@@ -155,10 +162,10 @@ fun MainScreen(
                 backgroundColor = Color(0xFF007AFF),
                 modifier = Modifier.testTag(Tags.MainScreen.loginButton)
             )
-            
+
             Spacer(modifier = Modifier.height(200.dp))
         }
-        
+
         // Confetti animation overlay
         if (showConfetti) {
             KonfettiView(

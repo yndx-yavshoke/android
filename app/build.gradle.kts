@@ -6,6 +6,10 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
+dependencies {
+    implementation("com.github.javafaker:javafaker:1.0.2")
+    androidTestImplementation("androidx.test.uiautomator:uiautomator:2.2.0")
+}
 android {
     namespace = "ru.yavshok.app"
     compileSdk = 34
@@ -29,7 +33,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        
+
         // Add build config fields
 
         buildConfigField("String", "BASE_URL", "\"${project.findProperty("API_BASE_URL")}\"")
@@ -42,7 +46,7 @@ android {
             val keyPassword = localProperties.getProperty("KEY_PASSWORD")
             val keystorePath = localProperties.getProperty("KEYSTORE_PATH")
             val keystorePassword = localProperties.getProperty("KEYSTORE_PASSWORD")
-            
+
             if (keyAlias != null && keyPassword != null && keystorePath != null && keystorePassword != null) {
                 this.keyAlias = keyAlias
                 this.keyPassword = keyPassword
@@ -68,7 +72,7 @@ android {
                     localProperties.getProperty("KEY_PASSWORD") != null &&
                     localProperties.getProperty("KEYSTORE_PATH") != null &&
                     localProperties.getProperty("KEYSTORE_PASSWORD") != null
-            
+
             if (hasKeystoreConfig) {
                 signingConfig = signingConfigs.getByName("release")
             }
@@ -98,23 +102,23 @@ android {
 dependencies {
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-    
+
     // Downgraded to versions compatible with compileSdk 33
     implementation("androidx.activity:activity-compose:1.7.2")
-    
+
     // Use a compatible Compose BOM
     implementation(platform("androidx.compose:compose-bom:2023.06.01"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
-    
+
     // Navigation - compatible with compileSdk 33
     implementation("androidx.navigation:navigation-compose:2.5.3")
-    
+
     // ViewModel - compatible with compileSdk 33
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
-    
+
     // HTTP client
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
@@ -122,17 +126,17 @@ dependencies {
 
     // App Metrica
 
-    
+
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
-    
+
     // Konfetti for confetti animation
     implementation("nl.dionsegijn:konfetti-compose:2.0.5")
-    
+
     // Coil for GIF loading
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("io.coil-kt:coil-gif:2.4.0")
-    
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
