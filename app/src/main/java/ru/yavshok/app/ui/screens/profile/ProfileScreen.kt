@@ -25,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -34,6 +35,7 @@ import coil.compose.AsyncImage
 import coil.decode.GifDecoder
 import coil.request.ImageRequest
 import ru.yavshok.app.R
+import ru.yavshok.app.Tags
 import ru.yavshok.app.viewmodel.ProfileUiState
 import ru.yavshok.app.viewmodel.ProfileViewModel
 
@@ -132,6 +134,7 @@ private fun ProfileHeader(
                     imageLoader = imageLoader,
                     modifier = Modifier
                         .size(80.dp)
+                        .testTag(Tags.ProfileScreen.photo)
                         .clip(CircleShape),
                     contentScale = ContentScale.Crop
                 )
@@ -196,6 +199,7 @@ private fun ProfileHeader(
             },
             modifier = Modifier
                 .fillMaxWidth()
+                .testTag(Tags.ProfileScreen.editButton)
                 .height(35.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Transparent,
@@ -241,7 +245,9 @@ private fun PhotoGrid(photos: List<String>) {
         columns = GridCells.Fixed(3),
         horizontalArrangement = Arrangement.spacedBy(2.dp),
         verticalArrangement = Arrangement.spacedBy(2.dp),
-        modifier = Modifier.height(400.dp) // Fixed height for the grid
+        modifier = Modifier
+            .height(400.dp) // Fixed height for the grid
+            .testTag(Tags.ProfileScreen.photoGrid),
     ) {
         items(photos) { photo ->
             val drawableRes = when (photo) {
