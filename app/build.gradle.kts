@@ -140,4 +140,7 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    //Faker for ui-tests
+    androidTestImplementation("io.github.serpro69:kotlin-faker:1.14.0")
 }

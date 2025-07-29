@@ -17,3 +17,6 @@ local.properties
 # Keystore files
 *.keystore
 *.jks
+
+# Test data
+app/src/androidTest/java/ru/yavshok/app/UserData.kt
