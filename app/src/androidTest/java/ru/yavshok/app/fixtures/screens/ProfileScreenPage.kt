@@ -1,5 +1,7 @@
 package ru.yavshok.app.fixtures.screens
 
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
@@ -77,5 +79,14 @@ class ProfileScreenPage (private val composeRule: ComposeTestRule) {
             timeoutMillis = 5_000L
         )
         return this
+    }
+
+    fun getUserName(): String {
+        return userName.fetchSemanticsNode()
+            .config
+            .getOrNull(SemanticsProperties.Text)
+            ?.firstOrNull()
+            ?.text
+            ?: ""
     }
 }

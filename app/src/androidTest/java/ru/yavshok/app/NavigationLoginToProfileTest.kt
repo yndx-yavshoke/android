@@ -36,7 +36,7 @@ class NavigationLoginToProfileTest {
     }
 
     @Test
-    @DisplayName("Навигация: Переход со страницы логина на страницу профиля")
+    @DisplayName("Навигация: Переход со страницы логина на страницу профиля (Успешная авторизация)")
     fun shouldNavigateFromLoginScreenToProfileScreen() {
         mainScreen.waitExistTitle()
         mainScreen.clickLogin()

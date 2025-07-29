@@ -143,6 +143,7 @@ dependencies {
     androidTestImplementation("io.qameta.allure:allure-kotlin-commons:2.4.0")
     androidTestImplementation("io.qameta.allure:allure-kotlin-junit4:2.4.0")
     androidTestImplementation("io.qameta.allure:allure-kotlin-android:2.4.0")
+    androidTestImplementation("io.github.serpro69:kotlin-faker:1.14.0")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 }

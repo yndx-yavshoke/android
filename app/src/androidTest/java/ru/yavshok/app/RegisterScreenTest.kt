@@ -1,39 +1,38 @@
 package ru.yavshok.app
 
-import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.test.core.app.ApplicationProvider
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.qameta.allure.kotlin.junit4.DisplayName
-import kotlinx.coroutines.test.TestScope
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import ru.yavshok.app.data.storage.TokenStorage
+import ru.yavshok.app.fixtures.screens.LoginScreenPage
+import ru.yavshok.app.fixtures.screens.MainScreenPage
 import ru.yavshok.app.fixtures.screens.ProfileScreenPage
 import ru.yavshok.app.fixtures.screens.RegisterScreenPage
-import ru.yavshok.app.ui.screens.register.RegisterScreen
 import ru.yavshok.app.utils.TestData
-import ru.yavshok.app.viewmodel.RegisterViewModel
-import ru.yavshok.app.viewmodel.ViewModelFactory
+import ru.yavshok.app.utils.TestUtils
 
 @RunWith(AndroidJUnit4::class)
 class RegisterScreenTest {
     @get:Rule
-    val composeRule = createComposeRule()
-
+    val composeRule = createAndroidComposeRule<MainActivity>()
     private val registerScreen by lazy { RegisterScreenPage(composeRule) }
     private val profileScreen by lazy { ProfileScreenPage(composeRule) }
 
-    val vmFactory = ViewModelFactory(ApplicationProvider.getApplicationContext())
-    val registerViewModel = vmFactory.create(RegisterViewModel::class.java)
-
     @Before
     fun setup() {
-        composeRule.setContent {
-            RegisterScreen(
-                viewModel = registerViewModel
-            )
-        }
+        TestUtils.disableAnimations()
+        val context = composeRule.activity
+        TokenStorage(context).logout()
+        TestUtils.launchMainActivityInTestMode()
+
+        val mainScreen = MainScreenPage(composeRule)
+        mainScreen.waitExistTitle().clickLogin()
+        val loginScreen = LoginScreenPage(composeRule)
+        loginScreen.waitExistTitle().clickRegister()
     }
 
     @Test
@@ -94,13 +93,15 @@ class RegisterScreenTest {
             .checkErrorText(TestData.ERROR_PASSWORD_SHORT)
     }
 
-//    @Test
-//    fun shouldRegisterSuccessfullyWithValidData() {
-//        val uniqueEmail = "test_${System.currentTimeMillis()}@example.com"
-//        registerScreen
-//            .register(email = uniqueEmail, password = "qwerty123", age = "3")
-//
-//        profileScreen.waitEditButton()
-//    }
+    @Test
+    @DisplayName("Регистрация: Успешная регистрация с валидными данными")
+    fun shouldRegisterSuccessfullyWithValidData() {
+        registerScreen
+            .register(
+                TestData.generateUniqueEmail(),
+                TestData.generateFakePassword() ,
+                TestData.generateFakeAge())
 
+        profileScreen.waitEditButton()
+    }
 }

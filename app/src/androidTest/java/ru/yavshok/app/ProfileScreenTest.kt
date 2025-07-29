@@ -47,7 +47,7 @@ class ProfileScreenTest {
     }
 
     @Test
-    @DisplayName("Профиль: Проверка отображения статуса: Взрослый котик")
+    @DisplayName("Профиль: Проверка отображения статуса - Взрослый котик")
     fun shouldDisplayCorrectAgeStatusForYoungCat() {
         profileScreen.waitUserName()
             .checkAgeStatusText(TestData.AGE_STATUS)

@@ -19,6 +19,13 @@ class EditProfileScreenTest {
     val composeRule = createAndroidComposeRule<MainActivity>()
     private val profileScreen by lazy { ProfileScreenPage(composeRule) }
     private val editProfileScreen by lazy { EditProfileScreenPage(composeRule) }
+    private lateinit var oldName: String
+
+    private fun navigateToEditProfile() {
+        profileScreen.waitUserName()
+        oldName = profileScreen.getUserName()
+        profileScreen.waitEditButton().clickEdit()
+    }
 
     @Before
     fun setup() {
@@ -26,10 +33,10 @@ class EditProfileScreenTest {
         val context = composeRule.activity
         TokenStorage(context).logout()
 
-        TestUtils.loginUser(context, TestData.EXISTING_EMAIL, TestData.VALID_PASSWORD)
+        TestUtils.loginUser(context, TestData.EXISTING_EMAIL_FOR_EDIT, TestData.VALID_PASSWORD_FOR_EDIT)
         TestUtils.launchMainActivityInTestMode()
 
-        profileScreen.waitUserName().waitEditButton().clickEdit()
+        navigateToEditProfile()
     }
 
     @Test
@@ -48,7 +55,7 @@ class EditProfileScreenTest {
     @Test
     @DisplayName("Редактирование профиля: Успешная смена имени пользователя")
     fun shouldChangeUserNameSuccessfully() {
-        val newName = TestData.NEW_NAME
+        val newName = TestData.generateFakeName()
         editProfileScreen
             .checkNameFieldIsDisplayed()
             .typeName(newName)
@@ -59,5 +66,23 @@ class EditProfileScreenTest {
             .waitUserName()
             .waitEditButton()
             .checkUserNameText(newName)
+        oldName = newName
+    }
+
+    @Test
+    @DisplayName("Редактирование профиля: Имя не сохранится при нажатии кнопки Cancel")
+    fun shouldCancelEditingAndKeepOldName() {
+        val newName = "ИмяНеСохранится"
+
+        editProfileScreen
+            .checkNameFieldIsDisplayed()
+            .typeName(newName)
+            .clickCancel()
+        editProfileScreen.title.assertDoesNotExist()
+
+        profileScreen
+            .waitUserName()
+            .waitEditButton()
+            .checkUserNameText(oldName)
     }
 }
