@@ -3,6 +3,7 @@ package ru.yavshok.app
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.qameta.allure.kotlin.junit4.DisplayName
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -20,6 +21,7 @@ class NavigationMainToLoginTest {
     private val loginScreen by lazy { LoginScreenPage(composeRule) }
 
     @Test
+    @DisplayName("Навигация: Переход с главной страницы на страницу логина")
     fun shouldNavigateFromMainScreenToLoginScreen() {
         mainScreen
             .waitExistTitle()

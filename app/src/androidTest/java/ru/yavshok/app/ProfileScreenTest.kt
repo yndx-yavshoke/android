@@ -7,10 +7,12 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import ru.yavshok.app.fixtures.screens.LoginScreenPage
+import ru.yavshok.app.data.storage.TokenStorage
 import ru.yavshok.app.fixtures.screens.MainScreenPage
 import ru.yavshok.app.fixtures.screens.ProfileScreenPage
-import ru.yavshok.app.utils.setupAuth
+import ru.yavshok.app.utils.TestData
+import ru.yavshok.app.utils.TestUtils
+import io.qameta.allure.kotlin.junit4.DisplayName
 
 
 @RunWith(AndroidJUnit4::class)
@@ -20,38 +22,42 @@ class ProfileScreenTest {
 
     private val profileScreen by lazy { ProfileScreenPage(composeRule) }
     private val mainScreen by lazy { MainScreenPage(composeRule) }
-    private val loginScreen by lazy { LoginScreenPage(composeRule) }
 
     @Before
     fun setup() {
+        TestUtils.disableAnimations()
         val context = composeRule.activity
-        setupAuth.loginUser(context, "valerii.mrm@yandex.ru", "qwerty123")
-        mainScreen.waitExistTitle().clickLogin()
-        loginScreen.waitExistTitle().login("valerii.mrm@yandex.ru", "qwerty123")
+        TokenStorage(context).logout()
+
+        TestUtils.loginUser(context, TestData.EXISTING_EMAIL, TestData.VALID_PASSWORD)
+        TestUtils.launchMainActivityInTestMode()
     }
 
     @Test
+    @DisplayName("Профиль: проверка отображения всех UI элементов")
     fun shouldDisplayAllUIElementsWithCorrectTextsOnProfileScreen() {
         profileScreen
             .waitUserName()
             .checkAvatarIsDisplayed()
-            .checkUserNameText("Janet Murazik")
-            .checkAgeStatusText("Взрослый котик")
+            .checkUserNameText(TestData.DISPLAY_NAME)
+            .checkAgeStatusText(TestData.AGE_STATUS)
             .checkLogoutButtonIsDisplayed()
             .checkEditButtonIsDisplayed()
             .checkEditButtonTextIsDisplayed()
     }
 
     @Test
+    @DisplayName("Профиль: Проверка отображения статуса: Взрослый котик")
     fun shouldDisplayCorrectAgeStatusForYoungCat() {
         profileScreen.waitUserName()
-            .checkAgeStatusText("Взрослый котик")
+            .checkAgeStatusText(TestData.AGE_STATUS)
 
-        composeRule.onNodeWithTag("main-email-input").assertDoesNotExist()
+        composeRule.onNodeWithTag(Tags.MainScreen.emailTextField).assertDoesNotExist()
         profileScreen.checkLogoutButtonIsDisplayed()
     }
 
     @Test
+    @DisplayName("Профиль: Проверка выхода из профиля (переход на главную страницу)")
     fun shouldLogout() {
         profileScreen
             .waitUserName()

@@ -3,17 +3,16 @@ package ru.yavshok.app
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.qameta.allure.kotlin.junit4.DisplayName
+import kotlinx.coroutines.test.TestScope
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import ru.yavshok.app.fixtures.screens.MainScreenPage
-import ru.yavshok.app.fixtures.screens.LoginScreenPage
 import ru.yavshok.app.fixtures.screens.ProfileScreenPage
 import ru.yavshok.app.fixtures.screens.RegisterScreenPage
-import ru.yavshok.app.ui.screens.login.LoginScreen
 import ru.yavshok.app.ui.screens.register.RegisterScreen
-import ru.yavshok.app.viewmodel.LoginViewModel
+import ru.yavshok.app.utils.TestData
 import ru.yavshok.app.viewmodel.RegisterViewModel
 import ru.yavshok.app.viewmodel.ViewModelFactory
 
@@ -38,6 +37,7 @@ class RegisterScreenTest {
     }
 
     @Test
+    @DisplayName("Регистрация: Отображение всех UI-элементов")
     fun shouldDisplayAllUIElementsOnRegisterScreen() {
         registerScreen
             .checkTitleIsDisplayed()
@@ -50,45 +50,48 @@ class RegisterScreenTest {
     }
 
     @Test
+    @DisplayName("Регистрация: Ошибка при неверном email")
     fun shouldShowErrorIfEmailInvalidOnRegisterScreen() {
         registerScreen
-            .register(email = "invalid-email", password = "qwerty123", age = "2")
+            .register(TestData.INVALID_EMAIL, TestData.VALID_PASSWORD, TestData.VALID_AGE)
             .waitErrorMessage()
-            .checkErrorText("Неверный формат email")
+            .checkErrorText(TestData.ERROR_EMAIL_FORMAT)
     }
 
     @Test
+    @DisplayName("Регистрация: Ошибка при незаполненных полях")
     fun shouldShowErrorIfFieldsAreEmptyOnRegisterScreen() {
         registerScreen
             .clickRegister()
             .waitErrorMessage()
-            .checkErrorText("Заполните все поля")
+            .checkErrorText(TestData.ERROR_EMPTY_FIELDS)
     }
 
     @Test
+    @DisplayName("Регистрация: Ошибка если пользователь уже существует")
     fun shouldShowErrorIfUserAlreadyExistsOnRegisterScreen() {
-        val existingEmail = "valerii.mrm@yandex.ru"
-
         registerScreen
-            .register(email = existingEmail, password = "qwerty123", age = "2")
+            .register(TestData.EXISTING_EMAIL, TestData.VALID_PASSWORD, TestData.VALID_AGE)
             .waitErrorMessage()
-            .checkErrorText("Пользователь с таким email уже существует")
+            .checkErrorText(TestData.ERROR_USER_EXISTS)
     }
 
     @Test
+    @DisplayName("Регистрация: Ошибка если возраст введён не числом")
     fun shouldShowErrorIfAgeNotNumberOnRegisterScreen() {
         registerScreen
-            .register(email = "newuser@example.com", password = "qwerty123", age = "много")
+            .register(TestData.NEW_EMAIL, TestData.VALID_PASSWORD, TestData.INVALID_AGE)
             .waitErrorMessage()
-            .checkErrorText("Возраст должен быть от 0 до 99 лет")
+            .checkErrorText(TestData.ERROR_AGE_FORMAT)
     }
 
     @Test
+    @DisplayName("Регистрация: Ошибка если пароль слишком короткий")
     fun shouldShowErrorIfPasswordTooShortOnRegisterScreen() {
         registerScreen
-            .register(email = "newuser@example.com", password = "123", age = "3")
+            .register(TestData.NEW_EMAIL, TestData.SHORT_PASSWORD, TestData.VALID_AGE)
             .waitErrorMessage()
-            .checkErrorText("Пароль должен содержать от 5 до 20 символов")
+            .checkErrorText(TestData.ERROR_PASSWORD_SHORT)
     }
 
 //    @Test

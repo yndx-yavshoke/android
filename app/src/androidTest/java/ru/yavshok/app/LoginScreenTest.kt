@@ -3,12 +3,14 @@ package ru.yavshok.app
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.qameta.allure.kotlin.junit4.DisplayName
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import ru.yavshok.app.fixtures.screens.LoginScreenPage
 import ru.yavshok.app.ui.screens.login.LoginScreen
+import ru.yavshok.app.utils.TestData
 import ru.yavshok.app.viewmodel.LoginViewModel
 import ru.yavshok.app.viewmodel.ViewModelFactory
 
@@ -37,6 +39,7 @@ class LoginScreenTest {
     }
 
     @Test
+    @DisplayName("Авторизация: проверка отображения всех UI элементов")
     fun shouldDisplayAllUIElementsWithCorrectTextsOnLoginScreen() {
         loginScreen
             .waitExistTitle()
@@ -50,29 +53,32 @@ class LoginScreenTest {
     }
 
     @Test
+    @DisplayName("Авторизация: показать ошибку при пустых полях")
     fun shouldShowErrorForEmptyFieldsOnLoginScreen() {
         loginScreen
             .waitExistTitle()
             .clickLogin()
             .waitErrorMessage()
-            .checkErrorText("Заполните все поля")
+            .checkErrorText(TestData.ERROR_EMPTY_FIELDS)
     }
 
     @Test
+    @DisplayName("Авторизация: показать ошибку при неверном формате email")
     fun shouldShowErrorForInvalidEmailFormatOnLoginScreen() {
         loginScreen
             .waitExistTitle()
-            .login("invalid-email", "123456")
+            .login(TestData.INVALID_EMAIL, TestData.VALID_PASSWORD)
             .waitErrorMessage()
-            .checkErrorText("Неверный формат email")
+            .checkErrorText(TestData.ERROR_EMAIL_FORMAT)
     }
 
     @Test
+    @DisplayName("Авторизация: показать ошибку при несуществующем пользователе")
     fun shouldShowErrorForNonExistentUserOnLoginScreen() {
         loginScreen
             .waitExistTitle()
-            .login("notfound@yavshok.ru", "password123")
+            .login(TestData.NEW_EMAIL, TestData.VALID_PASSWORD)
             .waitErrorMessage()
-            .checkErrorText("Неверный email или пароль")
+            .checkErrorText(TestData.ERROR_EMAIL_PASSWORD_NOT_EXISTS)
     }
 }

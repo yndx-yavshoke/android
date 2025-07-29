@@ -2,15 +2,17 @@ package ru.yavshok.app.data.storage
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 
 class TokenStorage(context: Context) {
     
     private val prefs: SharedPreferences = context.getSharedPreferences(
         PREFS_NAME, Context.MODE_PRIVATE
     )
-    
-    fun saveToken(token: String) {
-        prefs.edit().putString(TOKEN_KEY, token).apply()
+
+    fun saveToken(token: String, sync: Boolean = false) {
+        val editor = prefs.edit().putString(TOKEN_KEY, token)
+        if (sync) editor.commit() else editor.apply()
     }
     
     fun getToken(): String? {
@@ -20,6 +22,8 @@ class TokenStorage(context: Context) {
 
     
     fun isLoggedIn(): Boolean {
+        val token = prefs.getString(TOKEN_KEY, null)
+        Log.d("TokenStorage", "isLoggedIn check: token = $token")
         return getToken() != null
     }
     

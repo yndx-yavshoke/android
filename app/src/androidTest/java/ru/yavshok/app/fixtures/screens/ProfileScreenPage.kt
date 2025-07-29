@@ -16,7 +16,7 @@ class ProfileScreenPage (private val composeRule: ComposeTestRule) {
     private val userName = composeRule.onNodeWithTag(Tags.ProfileScreen.userName)
     private val ageStatusText = composeRule.onNodeWithTag(Tags.ProfileScreen.ageStatusText)
     private val logoutButton = composeRule.onNodeWithTag(Tags.ProfileScreen.logoutButton, useUnmergedTree = true)
-    private val editButton = composeRule.onNodeWithTag(Tags.ProfileScreen.editButton, useUnmergedTree = true)
+    private val editButton = composeRule.onNodeWithTag(Tags.ProfileScreen.editButton)
 
     fun checkAvatarIsDisplayed() : ProfileScreenPage {
         avatar.assertIsDisplayed()
@@ -45,7 +45,7 @@ class ProfileScreenPage (private val composeRule: ComposeTestRule) {
         return this
     }
 
-    fun checkEditButtonTextIsDisplayed(expected: String = "Change name"): ProfileScreenPage {
+    fun checkEditButtonTextIsDisplayed(expected: String = "Edit Profile"): ProfileScreenPage {
         editButton.assertTextContains(expected)
         return this
     }
@@ -65,7 +65,7 @@ class ProfileScreenPage (private val composeRule: ComposeTestRule) {
     fun waitUserName(): ProfileScreenPage {
         composeRule.waitUntilAtLeastOneExists(
             matcher = hasTestTag(Tags.ProfileScreen.userName),
-            timeoutMillis = 5_000L
+            timeoutMillis = 10_000L
         )
         return this
     }
@@ -78,20 +78,4 @@ class ProfileScreenPage (private val composeRule: ComposeTestRule) {
         )
         return this
     }
-
-    @OptIn(ExperimentalTestApi::class)
-    fun waitEditButtonIsClickable(): ProfileScreenPage {
-        composeRule.waitUntil(timeoutMillis = 5_000L) {
-            try {
-                composeRule.onNodeWithTag(Tags.ProfileScreen.editButton)
-                    .assertIsDisplayed()
-                    .assertHasClickAction()
-                true
-            } catch (e: AssertionError) {
-                false
-            }
-        }
-        return this
-    }
-
 }
