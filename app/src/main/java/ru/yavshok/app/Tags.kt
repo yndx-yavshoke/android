@@ -20,7 +20,7 @@ object Tags {
         const val loginButton = "login_screen.login_button"
         const val backButton = "login_screen.back_button"
         const val registerButton = "login_screen.register_button"
-        const val errorMessage = "login_screen.error_message"
+        const val errorLabel = "login_screen.error_label"
     }
 
     object ProfileScreen {
@@ -28,5 +28,12 @@ object Tags {
         const val logoutButton = "profile_screen.logout_button"
         const val nameLabel = "profile_screen.name_label"
         const val statusLabel = "profile_screen.status_label"
+    }
+
+    object EditProfileScreen {
+        const val titleLabel = "edit_profile_screen.title_label"
+        const val nameField = "profile_screen.name_field"
+        const val saveButton = "profile_screen.save_button"
+        const val cancelButton = "profile_screen.cancel_button"
     }
 }

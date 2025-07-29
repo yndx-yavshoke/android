@@ -23,7 +23,7 @@ class ProfileScreen(private val composeRule: ComposeTestRule) {
         )
     }
 
-    fun checkEditButtonIsDisplayed() {
+    fun checkEditProfileButtonIsDisplayed() {
         composeRule.onNodeWithTag(editProfileButton).assertIsDisplayed()
     }
 
@@ -41,5 +41,9 @@ class ProfileScreen(private val composeRule: ComposeTestRule) {
 
     fun clickLogoutButton()  {
         composeRule.onNodeWithTag(logoutButton).performClick()
+    }
+
+    fun clickEditProfileButton()  {
+        composeRule.onNodeWithTag(editProfileButton).performClick()
     }
 }

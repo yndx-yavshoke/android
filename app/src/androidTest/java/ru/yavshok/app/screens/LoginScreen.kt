@@ -20,6 +20,8 @@ class LoginScreen(private val composeRule: ComposeTestRule) {
     private val loginButton = Tags.LoginScreen.loginButton
     private val backButton = Tags.LoginScreen.backButton
 
+    private val errorLabel = Tags.LoginScreen.errorLabel
+
     fun waitToLoad() {
         composeRule.waitUntilAtLeastOneExists(
             matcher = hasTestTag(screenTitle),
@@ -71,7 +73,11 @@ class LoginScreen(private val composeRule: ComposeTestRule) {
         composeRule.onAllNodesWithTag(emailTextField).assertCountEquals(0)
     }
 
-    fun assertEmailDisplayed(email: String) {
+    fun assertEmailIsDisplayed(email: String) {
         composeRule.onNodeWithTag(emailTextField).assertTextContains(email)
+    }
+
+    fun assertErrorLabelIsDisplayed() {
+        composeRule.onNodeWithTag(errorLabel).assertIsDisplayed()
     }
 }
