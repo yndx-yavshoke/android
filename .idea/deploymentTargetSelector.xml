@@ -5,19 +5,19 @@
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="MainScreenTest">
+      <SelectionState runConfigName="registerWithWrongEmailFormat()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="userNotExist()">
+      <SelectionState runConfigName="registerOfExistUser()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="userExist()">
+      <SelectionState runConfigName="tooShortPassword()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="shouldTypeEmailOnLoginScreen()">
+      <SelectionState runConfigName="tooLongPassword()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="shouldNavigateFromMainScreenToLoginScreen()">
+      <SelectionState runConfigName="successfulRegister()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

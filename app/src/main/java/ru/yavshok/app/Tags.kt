@@ -30,6 +30,7 @@ object Tags {
         const val ageField = "register_screen.age_field"
         const val registerButton = "register_screen.register_button"
         const val backButton = "register_screen.back_button"
+        const val errorMessage = "register_screen.error_message"
     }
 
     object ProfileScreen {

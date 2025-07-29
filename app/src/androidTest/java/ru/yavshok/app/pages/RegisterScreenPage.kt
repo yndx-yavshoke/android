@@ -6,6 +6,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.hasTestTag
 import ru.yavshok.app.Tags
 
@@ -16,6 +17,7 @@ class RegisterScreenPage (private val composeRule: ComposeTestRule) {
     public val ageInput = composeRule.onNodeWithTag("register_screen.age_field")
     public val registerButton = composeRule.onNodeWithTag("register_screen.register_button")
     public val backButton = composeRule.onNodeWithTag("register_screen.back_button")
+    public val errorMessage = composeRule.onNodeWithTag("register_screen.error_message")
 
     @OptIn(ExperimentalTestApi::class)
     fun waitForTitle(): RegisterScreenPage {
@@ -58,5 +60,25 @@ class RegisterScreenPage (private val composeRule: ComposeTestRule) {
 
     fun fullRegister(email: String, password: String, age: String): RegisterScreenPage {
         return fillEmailInput(email).fillPasswordInput(password).fillAgeInput(age).clickRegisterButton()
+    }
+
+    fun emptyFieldsError(): RegisterScreenPage {
+        errorMessage.assertTextContains("Заполните все поля")
+        return this
+    }
+
+    fun incorrectFormatOfEmailError (): RegisterScreenPage {
+        errorMessage.assertTextContains("Неверный формат email")
+        return this
+    }
+
+    fun existUserError (): RegisterScreenPage {
+        errorMessage.assertTextContains("Пользователь с таким email уже существует")
+        return this
+    }
+
+    fun tooShortPasswordError (): RegisterScreenPage {
+        errorMessage.assertTextContains("Пароль должен содержать от 5 до 20 символов")
+        return this
     }
 }

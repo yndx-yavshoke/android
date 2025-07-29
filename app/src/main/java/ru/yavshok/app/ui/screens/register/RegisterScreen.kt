@@ -121,7 +121,9 @@ fun RegisterScreen(
                 color = Color.Red,
                 fontSize = 16.sp,
                 textAlign = TextAlign.Start,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(Tags.RegisterScreen.errorMessage)
             )
         }
         
