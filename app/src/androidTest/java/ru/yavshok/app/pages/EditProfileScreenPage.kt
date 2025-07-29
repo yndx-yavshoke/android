@@ -4,6 +4,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 
 class EditProfileScreenPage (private val composeRule: ComposeTestRule) {
@@ -14,6 +15,7 @@ class EditProfileScreenPage (private val composeRule: ComposeTestRule) {
 
     fun fillEditNameInput(name: String): EditProfileScreenPage {
         nameEditInput.assertIsDisplayed()
+        nameEditInput.performTextClearance()
         nameEditInput.performTextInput(name);
         return this
     }
