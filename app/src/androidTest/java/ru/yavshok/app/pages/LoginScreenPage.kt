@@ -1,7 +1,6 @@
 package ru.yavshok.app.pages
 
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
@@ -12,13 +11,13 @@ import androidx.compose.ui.test.hasTestTag
 import ru.yavshok.app.Tags
 
 class LoginScreenPage (private val composeRule: ComposeTestRule) {
-    public val title = composeRule.onNodeWithTag("login_screen.screen_title")
-    public val emailInput = composeRule.onNodeWithTag("login_screen.email_text_field")
-    public val passwordInput = composeRule.onNodeWithTag("login_screen.password_text_field")
-    public val loginButton = composeRule.onNodeWithTag("login_screen.login_button")
-    public val backButton = composeRule.onNodeWithTag("login_screen.back_button")
-    public val toRegisterScreenButton = composeRule.onNodeWithTag("login_screen.register_button")
-    public val errorMessage = composeRule.onNodeWithTag("login_screen.error_message")
+    val title = composeRule.onNodeWithTag("login_screen.screen_title")
+    val emailInput = composeRule.onNodeWithTag("login_screen.email_text_field")
+    val passwordInput = composeRule.onNodeWithTag("login_screen.password_text_field")
+    private val loginButton = composeRule.onNodeWithTag("login_screen.login_button")
+    private val backButton = composeRule.onNodeWithTag("login_screen.back_button")
+    private val toRegisterScreenButton = composeRule.onNodeWithTag("login_screen.register_button")
+    private val errorMessage = composeRule.onNodeWithTag("login_screen.error_message")
 
     @OptIn(ExperimentalTestApi::class)
     fun waitForTitle(): LoginScreenPage {
@@ -31,13 +30,13 @@ class LoginScreenPage (private val composeRule: ComposeTestRule) {
 
     fun fillEmailInput(email: String): LoginScreenPage {
         emailInput.assertIsDisplayed()
-        emailInput.performTextInput(email);
+        emailInput.performTextInput(email)
         return this
     }
 
     fun fillPasswordInput(password: String): LoginScreenPage {
         passwordInput.assertIsDisplayed()
-        passwordInput.performTextInput(password);
+        passwordInput.performTextInput(password)
         return this
     }
 

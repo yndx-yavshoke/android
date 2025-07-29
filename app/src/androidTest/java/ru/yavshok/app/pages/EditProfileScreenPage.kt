@@ -16,7 +16,7 @@ class EditProfileScreenPage (private val composeRule: ComposeTestRule) {
     fun fillEditNameInput(name: String): EditProfileScreenPage {
         nameEditInput.assertIsDisplayed()
         nameEditInput.performTextClearance()
-        nameEditInput.performTextInput(name);
+        nameEditInput.performTextInput(name)
         return this
     }
 

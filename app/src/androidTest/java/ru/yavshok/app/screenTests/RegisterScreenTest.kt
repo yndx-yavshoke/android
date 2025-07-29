@@ -13,7 +13,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import ru.yavshok.app.Tags
 import ru.yavshok.app.UserData
-import ru.yavshok.app.data.model.User
 import ru.yavshok.app.pages.RegisterScreenPage
 import ru.yavshok.app.ui.screens.register.RegisterScreen
 import ru.yavshok.app.viewmodel.ViewModelFactory

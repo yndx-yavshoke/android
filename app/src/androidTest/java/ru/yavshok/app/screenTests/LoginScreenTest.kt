@@ -3,7 +3,6 @@ package ru.yavshok.app.screenTests
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithTag
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -17,9 +16,7 @@ import ru.yavshok.app.UserData
 import ru.yavshok.app.pages.LoginScreenPage
 import ru.yavshok.app.ui.screens.login.LoginScreen
 import ru.yavshok.app.viewmodel.ViewModelFactory
-import kotlin.concurrent.thread
 import androidx.compose.ui.test.hasTestTag
-import androidx.compose.ui.test.onAllNodesWithTag
 
 
 @RunWith(AndroidJUnit4::class)
@@ -71,16 +68,14 @@ class LoginScreenTest {
     @Test
     fun loginWithWrongData() {
         val fakePassword = faker.person.hashCode().toString().take(10)
-        val fakeEmail = faker.internet.email()
-        val invalidEmail = fakeEmail.replace("@", "")
         loginScreen.title.assertIsDisplayed()
-        loginScreen.fullLogin(invalidEmail, fakePassword)
+        loginScreen.fullLogin(UserData.TEST_EMAIL, fakePassword)
         @OptIn(androidx.compose.ui.test.ExperimentalTestApi::class)
         composeRule.waitUntilAtLeastOneExists(
             timeoutMillis = 5000L,
             matcher = hasTestTag(Tags.LoginScreen.errorMessage)
         )
-        loginScreen.incorrectFormatOfEmailError()
+        loginScreen.incorrectPasswordOrEmailError()
     }
 
     @Test

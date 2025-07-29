@@ -1,11 +1,9 @@
 package ru.yavshok.app.screenTests
 
-//import androidx.compose.ui.test.junit4.waitUntil
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Before
 import org.junit.Rule
@@ -14,7 +12,6 @@ import org.junit.runner.RunWith
 import ru.yavshok.app.pages.MainScreenPage
 import ru.yavshok.app.pages.exists
 import ru.yavshok.app.ui.screens.MainScreen
-import ru.yavshok.app.viewmodel.ViewModelFactory
 import io.github.serpro69.kfaker.Faker
 
 
@@ -26,8 +23,6 @@ class MainScreenTest {
 
     private lateinit var mainScreen: MainScreenPage
     private val faker = Faker()
-    val vmFactory = ViewModelFactory(ApplicationProvider.getApplicationContext())
-
 
     @Before
     fun setup() {

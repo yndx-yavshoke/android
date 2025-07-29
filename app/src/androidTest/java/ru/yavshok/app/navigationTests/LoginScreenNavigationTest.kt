@@ -71,7 +71,7 @@ class LoginScreenNavigationTest {
 
     @OptIn(ExperimentalTestApi::class)
     @Test
-    fun succesfulLogin() {
+    fun successfulLogin() {
         mainScreen.waitForTitle()
         mainScreen.title.assertIsDisplayed()
         mainScreen.goToLoginButton.performClick()

@@ -14,7 +14,6 @@ import ru.yavshok.app.pages.LoginScreenPage
 import ru.yavshok.app.pages.MainScreenPage
 import ru.yavshok.app.pages.ProfileScreenPage
 import ru.yavshok.app.pages.RegisterScreenPage
-import kotlin.math.log
 import io.github.serpro69.kfaker.Faker
 import org.junit.Ignore
 import ru.yavshok.app.Tags
@@ -58,7 +57,7 @@ class RegisterScreenNavigationTest {
         registerScreen.title.assertDoesNotExist()
     }
 
-    @Ignore
+    @Ignore("Пропускаем чтобы не нагружать бэк")
     @Test
     fun successfulRegister() {
         val fakePassword = faker.person.hashCode().toString().take(10)
