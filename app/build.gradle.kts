@@ -140,4 +140,7 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // Java Faker
+    implementation("com.github.javafaker:javafaker:1.0.2")
 }
