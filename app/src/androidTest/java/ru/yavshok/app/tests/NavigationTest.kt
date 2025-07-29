@@ -16,9 +16,6 @@ import ru.yavshok.app.Tags
 @OptIn(ExperimentalTestApi::class)
 @RunWith(AndroidJUnit4::class)
 class NavigationTest {
-    //Tags.MainScreen.screenTitle
-    //Tags.MainScreen.loginButton
-    //Tags.LoginScreen.screenTitle
 
     @get:Rule
     val composeRule = createAndroidComposeRule<MainActivity>()

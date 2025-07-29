@@ -17,8 +17,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import ru.yavshok.app.MainActivity
 import ru.yavshok.app.Tags
+import ru.yavshok.app.pages.EditProfileScreenPage
 import ru.yavshok.app.pages.LoginScreenPage
+import ru.yavshok.app.pages.MainScreenPage
 import ru.yavshok.app.pages.ProfileScreenPage
+import ru.yavshok.app.ui.screens.profile.EditProfileScreen
 import ru.yavshok.app.ui.screens.profile.ProfileScreen
 import ru.yavshok.app.viewmodel.ViewModelFactory
 
@@ -32,32 +35,26 @@ class ProfileScreenActivityTest {
     private val testUser = User("abra@mail.ru", "cadabra", 30)
     private var profileScreen = ProfileScreenPage(composeRuleActivity)
     private val loginScreen = LoginScreenPage(composeRuleActivity)
+    private val editProfileScreen = EditProfileScreenPage(composeRuleActivity)
+    private val mainScreen = MainScreenPage(composeRuleActivity)
 
     @OptIn(ExperimentalTestApi::class)
     @Before
     fun setUp() {
-        composeRuleActivity.waitUntilAtLeastOneExists(
-            timeoutMillis = 5_000L,
-            matcher = hasTestTag(Tags.MainScreen.screenTitle)
-        )
-        composeRuleActivity.onNodeWithTag(Tags.MainScreen.screenTitle).assertIsDisplayed()
-        composeRuleActivity.onNodeWithTag(Tags.MainScreen.loginButton).assertIsDisplayed()
-        composeRuleActivity.onNodeWithTag(Tags.MainScreen.loginButton).performClick()
-
-        composeRuleActivity.waitUntilAtLeastOneExists(
-            timeoutMillis = 5_000L,
-            matcher = hasTestTag(Tags.LoginScreen.screenTitle)
-        )
+        mainScreen
+            .timeoutForScreenTitle()
+            .displayLoginButton()
+            .clickLoginButton()
 
         loginScreen
+            .timeoutForScreenTitle()
             .typeEmail(testUser.username)
             .typePassword(testUser.password)
             .clickLoginButton()
 
-        composeRuleActivity.waitUntilAtLeastOneExists(
-            timeoutMillis = 9_000L,
-            matcher = hasTestTag(Tags.ProfileScreen.exitButton)
-        )
+        profileScreen
+            .timeoutForExitButton()
+
     }
 
     @Test
@@ -71,4 +68,25 @@ class ProfileScreenActivityTest {
             .clickExitButton()
     }
 
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun shouldGoToEditProfileScreen() {
+        profileScreen
+            .clickEditProfileButton()
+        editProfileScreen
+            .displayScreenTitle()
+            .clickCancelButton()
+        profileScreen
+            .timeoutForExitButton()
+            .clickExitButton()
+    }
+
+    @Test
+    fun shouldGoToMainScreen() {
+        profileScreen
+            .displayExitButton()
+            .clickExitButton()
+        mainScreen
+            .timeoutForScreenTitle()
+    }
 }

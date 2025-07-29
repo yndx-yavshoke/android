@@ -41,4 +41,12 @@ class ProfileScreenPage(private val composeRule: ComposeTestRule) {
     fun clickEditProfileButton() = apply {
         composeRule.onNodeWithTag(editProfileButton).performClick()
     }
+
+    @OptIn(ExperimentalTestApi::class)
+    fun timeoutForExitButton() = apply {
+        composeRule.waitUntilAtLeastOneExists(
+            timeoutMillis = 9_000L,
+            matcher = hasTestTag(exitButton)
+        )
+    }
 }

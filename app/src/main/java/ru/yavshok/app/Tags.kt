@@ -36,4 +36,11 @@ object Tags {
         const val editProfileButton = "profile_screen.edit_profile_button"
 
     }
+
+    object EditProfileScreen {
+        const val screenTitle = "edit_profile_screen.screen_title"
+        const val nameTextField = "edit_profile_screen.name_text_field"
+        const val saveChangesButton = "edit_profile_screen.save_changes_button"
+        const val cancelButton = "edit_profile_screen.cancel_button"
+    }
 }

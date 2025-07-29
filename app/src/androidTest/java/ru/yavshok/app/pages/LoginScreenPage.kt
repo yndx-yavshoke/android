@@ -1,7 +1,9 @@
 package ru.yavshok.app.pages
 
 import android.R.string
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
@@ -49,5 +51,13 @@ class LoginScreenPage(private val composeRule: ComposeTestRule) {
 
     fun clickLoginButton() = apply {
         composeRule.onNodeWithTag(loginButton).performClick()
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    fun timeoutForScreenTitle() = apply {
+        composeRule.waitUntilAtLeastOneExists(
+            timeoutMillis = 5_000L,
+            matcher = hasTestTag(screenTitle)
+        )
     }
 }
