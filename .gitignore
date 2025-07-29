@@ -17,3 +17,16 @@ local.properties
 # Keystore files
 *.keystore
 *.jks
+
+build.gradle.kts
+gradle/wrapper/gradle-wrapper.jar
+gradle/wrapper/gradle-wrapper.properties
+gradlew
+gradlew.bat
+.idea/androidTestResultsUserPreferences.xml
+.idea/compiler.xml
+.idea/deploymentTargetSelector.xml
+.idea/gradle.xml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/misc.xml
+
