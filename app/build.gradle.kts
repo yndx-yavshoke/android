@@ -132,7 +132,10 @@ dependencies {
     // Coil for GIF loading
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("io.coil-kt:coil-gif:2.4.0")
-    
+    //implementation("androidx.test.uiautomator:uiautomator:2.3.0")
+    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("io.coil-kt:coil-gif:2.4.0")
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -140,4 +143,18 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+
+    implementation("com.github.javafaker:javafaker:1.0.2")
+
+    implementation("com.google.code.gson:gson:2.10.1")
+    testImplementation("com.google.code.gson:gson:2.10.1")
+
+    androidTestImplementation("androidx.test:runner:1.5.0")
+    androidTestImplementation("androidx.test:rules:1.5.0")
+    androidTestImplementation("androidx.test:core:1.5.0")
+    androidTestImplementation("androidx.test:core-ktx:1.5.0")
+    androidTestImplementation("com.github.javafaker:javafaker:1.0.2")
+    androidTestImplementation("io.github.serpro69:kotlin-faker:1.14.0")
+
 }
