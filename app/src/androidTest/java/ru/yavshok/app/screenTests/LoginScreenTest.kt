@@ -71,6 +71,22 @@ class LoginScreenTest {
     @Test
     fun loginWithWrongData() {
         val fakePassword = faker.person.hashCode().toString().take(10)
+        val fakeEmail = faker.internet.email()
+        val invalidEmail = fakeEmail.replace("@", "")
+        loginScreen.title.assertIsDisplayed()
+        loginScreen.fullLogin(invalidEmail, fakePassword)
+        @OptIn(androidx.compose.ui.test.ExperimentalTestApi::class)
+        composeRule.waitUntilAtLeastOneExists(
+            timeoutMillis = 5000L,
+            matcher = hasTestTag(Tags.LoginScreen.errorMessage)
+        )
+        loginScreen.incorrectFormatOfEmailError()
+    }
+
+    @Test
+    fun loginWithWrongEmailFormat() {
+        val fakePassword = faker.person.hashCode().toString().take(10)
+
         loginScreen.title.assertIsDisplayed()
         loginScreen.fullLogin(UserData.TEST_EMAIL, fakePassword)
         @OptIn(androidx.compose.ui.test.ExperimentalTestApi::class)
@@ -80,6 +96,4 @@ class LoginScreenTest {
         )
         loginScreen.incorrectPasswordOrEmailError()
     }
-
-
 }
