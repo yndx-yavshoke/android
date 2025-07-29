@@ -126,17 +126,17 @@ private fun ProfileHeader(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // Profile image
-//                AsyncImage(
-//                    model = ImageRequest.Builder(LocalContext.current)
-//                        .data(R.drawable.profile)
-//                        .build(),
-//                    contentDescription = "Profile Image",
-//                    imageLoader = imageLoader,
-//                    modifier = Modifier
-//                        .size(80.dp)
-//                        .clip(CircleShape),
-//                    contentScale = ContentScale.Crop
-//                )
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(R.drawable.profile)
+                        .build(),
+                    contentDescription = "Profile Image",
+                    imageLoader = imageLoader,
+                    modifier = Modifier
+                        .size(80.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop
+                )
                 
                 Spacer(modifier = Modifier.width(20.dp))
                 
@@ -148,13 +148,17 @@ private fun ProfileHeader(
                         text = profile.name,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black
+                        color = Color.Black,
+                        modifier = Modifier
+                            .testTag(Tags.ProfileScreen.nameLabel),
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = profile.subtitle,
                         fontSize = 16.sp,
-                        color = Color.Black
+                        color = Color.Black,
+                        modifier = Modifier
+                            .testTag(Tags.ProfileScreen.statusLabel)
                     )
                 }
             }
@@ -178,6 +182,8 @@ private fun ProfileHeader(
                  onClick = { 
                      onLogoutClick() 
                  },
+                 modifier = Modifier
+                     .testTag(Tags.ProfileScreen.logoutButton),
              ) {
                  Icon(
                      Logout,

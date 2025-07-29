@@ -25,5 +25,8 @@ object Tags {
 
     object ProfileScreen {
         const val editProfileButton = "profile_screen.edit_profile_button"
+        const val logoutButton = "profile_screen.logout_button"
+        const val nameLabel = "profile_screen.name_label"
+        const val statusLabel = "profile_screen.status_label"
     }
 }

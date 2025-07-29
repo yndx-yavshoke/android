@@ -53,7 +53,7 @@ class MainScreenTest {
             typeEmail(email)
             checkTypedEmail(email)
             checkCheckButtonIsDisplayed()
-            tapCheckButton()
+            clickCheckButton()
             waitToLoadLabel()
             checkSuccessLabelIsDisplayed()
         }
@@ -68,7 +68,7 @@ class MainScreenTest {
             typeEmail(email)
             checkTypedEmail(email)
             checkCheckButtonIsDisplayed()
-            tapCheckButton()
+            clickCheckButton()
             waitToLoadLabel()
             checkSuccessCatIsDisplayed()
         }

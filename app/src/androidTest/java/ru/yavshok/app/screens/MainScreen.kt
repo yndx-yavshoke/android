@@ -1,16 +1,13 @@
 package ru.yavshok.app.screens
 
-import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.ComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
-import org.junit.Rule
 import ru.yavshok.app.Tags
 
 @OptIn(ExperimentalTestApi::class)
@@ -35,11 +32,11 @@ class MainScreen(private val composeRule: ComposeTestRule) {
         composeRule.onNodeWithTag(checkButton).assertIsDisplayed()
     }
 
-    fun tapLoginButton()  {
+    fun clickLoginButton()  {
         composeRule.onNodeWithTag(loginButton).performClick()
     }
 
-    fun tapCheckButton() {
+    fun clickCheckButton() {
         composeRule.onNodeWithTag(checkButton).performClick()
     }
 
