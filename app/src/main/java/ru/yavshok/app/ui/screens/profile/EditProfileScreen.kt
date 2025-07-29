@@ -8,10 +8,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.yavshok.app.Tags
 import ru.yavshok.app.ui.components.TextField
 import ru.yavshok.app.ui.components.Button
 import ru.yavshok.app.viewmodel.EditProfileViewModel
@@ -59,7 +61,8 @@ fun EditProfileScreen(
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            modifier = Modifier.testTag(Tags.EditProfileScreen.screenTitle)
         )
         
         Spacer(modifier = Modifier.height(48.dp))
@@ -72,7 +75,8 @@ fun EditProfileScreen(
             color = Color.Black,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 8.dp),
+                .padding(bottom = 8.dp)
+                .testTag(Tags.EditProfileScreen.nameLabel),
             textAlign = TextAlign.Start
         )
         
@@ -83,7 +87,9 @@ fun EditProfileScreen(
                 viewModel.updateName(newValue)
             },
             placeholder = "Enter your name",
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(Tags.EditProfileScreen.newNameTextField),
             isError = uiState.errorMessage != null
         )
         
@@ -96,7 +102,9 @@ fun EditProfileScreen(
                 color = Color.Red,
                 fontSize = 16.sp,
                 textAlign = TextAlign.Start,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(Tags.EditProfileScreen.errorText),
             )
         }
         
@@ -108,7 +116,9 @@ fun EditProfileScreen(
             onClick = {
                 viewModel.updateProfile()
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(Tags.EditProfileScreen.saveChangesButton),
             isEnabled = !uiState.isLoading && uiState.name.isNotBlank(),
             backgroundColor = Color(0xFF007AFF)
         )
@@ -121,7 +131,9 @@ fun EditProfileScreen(
             onClick = {
                 onNavigateBack()
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(Tags.EditProfileScreen.backButton),
             isEnabled = !uiState.isLoading,
             backgroundColor = Color(0xFF6C757D)
         )

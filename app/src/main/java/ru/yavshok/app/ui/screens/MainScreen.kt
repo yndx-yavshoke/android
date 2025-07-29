@@ -110,7 +110,8 @@ fun MainScreen(
                     modifier = Modifier
                         .fillMaxWidth(0.9f)
                         .height(300.dp)
-                        .padding(bottom = 16.dp),
+                        .padding(bottom = 16.dp)
+                        .testTag(Tags.MainScreen.gifWithCat),
                     contentScale = ContentScale.Crop
                 )
                 Text(
@@ -118,7 +119,9 @@ fun MainScreen(
                     color = Color(0xFF4CAF50), // Green color
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                        .testTag(Tags.MainScreen.greenShokText),
                 )
                 
             }
@@ -130,6 +133,7 @@ fun MainScreen(
                         color = Color.Red,
                         fontSize = 30.sp,
                         modifier = Modifier.padding(bottom = 16.dp)
+                            .testTag(Tags.MainScreen.redShokText)
                     )
                 }
             }
@@ -143,7 +147,9 @@ fun MainScreen(
                 isEnabled = viewModel.isEmailValid() && !isLoading,
                 backgroundColor = Color(0xFF007AFF),
                 disabledBackgroundColor = Color.Gray,
-                modifier = Modifier.padding(bottom = 12.dp)
+                modifier = Modifier
+                    .testTag(Tags.MainScreen.imInShokButton)
+                    .padding(bottom = 12.dp)
             )
             
             // "В шок" button

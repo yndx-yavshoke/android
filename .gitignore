@@ -17,3 +17,5 @@ local.properties
 # Keystore files
 *.keystore
 *.jks
+
+/app/src/androidTest/java/ru/yavshok/app/secrets
